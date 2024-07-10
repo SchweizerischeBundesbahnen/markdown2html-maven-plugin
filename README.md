@@ -17,7 +17,7 @@ This plugin can be used in a maven project by adding the following to the `pom.x
     <build>
         <plugins>
             <plugin>
-                <groupId>ch.sbb</groupId>
+                <groupId>ch.sbb.maven.plugins</groupId>
                 <artifactId>markdown2html-maven-plugin</artifactId>
                 <version>${markdown2html-maven-plugin.version}</version>
                 <executions>

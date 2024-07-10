@@ -1,6 +1,6 @@
-package ch.sbb.markdown2html.github;
+package ch.sbb.maven.plugins.markdown2html.github;
 
-import ch.sbb.markdown2html.github.model.MarkdownRequest;
+import ch.sbb.maven.plugins.markdown2html.github.model.MarkdownRequest;
 import lombok.AllArgsConstructor;
 import org.apache.hc.client5.http.classic.methods.HttpPost;
 import org.apache.hc.client5.http.impl.classic.CloseableHttpClient;

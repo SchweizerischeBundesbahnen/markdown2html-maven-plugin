@@ -1,6 +1,6 @@
-package ch.sbb.markdown2html;
+package ch.sbb.maven.plugins.markdown2html;
 
-import ch.sbb.markdown2html.github.GitHubHttpClient;
+import ch.sbb.maven.plugins.markdown2html.github.GitHubHttpClient;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugins.annotations.LifecyclePhase;

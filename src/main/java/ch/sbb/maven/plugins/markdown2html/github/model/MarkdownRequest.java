@@ -1,4 +1,4 @@
-package ch.sbb.markdown2html.github.model;
+package ch.sbb.maven.plugins.markdown2html.github.model;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;

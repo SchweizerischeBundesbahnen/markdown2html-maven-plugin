@@ -1,4 +1,4 @@
-package ch.sbb.markdown2html.github;
+package ch.sbb.maven.plugins.markdown2html.github;
 
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
