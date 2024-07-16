@@ -10,8 +10,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Data
 public class MarkdownRequest {
-    public String mode;
-    public String text;
+    private String mode;
+    private String text;
 
     public String toJSON() throws JsonProcessingException {
         ObjectMapper objectMapper = new ObjectMapper();
