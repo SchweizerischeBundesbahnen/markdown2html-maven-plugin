@@ -3,7 +3,7 @@
 
     <groupId>ch.sbb.maven.plugins</groupId>
     <artifactId>markdown2html-maven-plugin</artifactId>
-    <version>1.1.0</version>
+    <version>1.1.1-SNAPSHOT</version>
     <packaging>maven-plugin</packaging>
 
     <name>Markdown to HTML Maven Plugin</name>
