@@ -1,5 +1,18 @@
 # Changelog
 
+## [1.1.0](https://github.com/SchweizerischeBundesbahnen/markdown2html-maven-plugin/compare/v1.0.0...v1.1.0) (2024-07-16)
+
+
+### Features
+
+* failOnError parameter added, default value true ([#9](https://github.com/SchweizerischeBundesbahnen/markdown2html-maven-plugin/issues/9)) ([73b2f35](https://github.com/SchweizerischeBundesbahnen/markdown2html-maven-plugin/commit/73b2f35dcdfa2741c59a008bb2e7342c5cf1ac05))
+* group id changed according to SBB naming rules ([#6](https://github.com/SchweizerischeBundesbahnen/markdown2html-maven-plugin/issues/6)) ([0fb8eec](https://github.com/SchweizerischeBundesbahnen/markdown2html-maven-plugin/commit/0fb8eec4456ce2ac5960aadaceadddb0a2ff89df))
+
+
+### Bug Fixes
+
+* set Content-Type for POST request ([#8](https://github.com/SchweizerischeBundesbahnen/markdown2html-maven-plugin/issues/8)) ([f39378a](https://github.com/SchweizerischeBundesbahnen/markdown2html-maven-plugin/commit/f39378ab3cf09ecde2ccc816ab5c2c02f97c02e5))
+
 ## 1.0.0 (2024-07-10)
 
 
