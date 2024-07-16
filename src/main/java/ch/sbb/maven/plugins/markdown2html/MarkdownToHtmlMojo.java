@@ -50,7 +50,7 @@ public class MarkdownToHtmlMojo extends AbstractMojo {
                 throw new MojoExecutionException("Error processing markdown file", e);
             } else {
                 log.error("Error processing markdown file:", e);
-                log.info("Skipping execution due to failOnError=false");
+                log.warn("Skipping execution due to failOnError=false");
             }
         }
     }
