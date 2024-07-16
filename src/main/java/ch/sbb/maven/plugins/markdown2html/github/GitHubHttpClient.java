@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import org.apache.hc.client5.http.classic.methods.HttpPost;
 import org.apache.hc.client5.http.impl.classic.CloseableHttpClient;
 import org.apache.hc.client5.http.impl.classic.HttpClients;
+import org.apache.hc.core5.http.ContentType;
 import org.apache.hc.core5.http.HttpHeaders;
 import org.apache.hc.core5.http.HttpStatus;
 import org.apache.hc.core5.http.io.HttpClientResponseHandler;
@@ -35,7 +36,7 @@ public class GitHubHttpClient {
             }
 
             MarkdownRequest markdownRequest = new MarkdownRequest(GFM, markdown);
-            httpPost.setEntity(new StringEntity(markdownRequest.toJSON()));
+            httpPost.setEntity(new StringEntity(markdownRequest.toJSON(), ContentType.APPLICATION_JSON));
 
             return executeRequest(httpClient, httpPost);
         }

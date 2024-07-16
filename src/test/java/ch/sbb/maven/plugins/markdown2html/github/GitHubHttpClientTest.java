@@ -13,7 +13,8 @@ class GitHubHttpClientTest {
     public static Stream<Arguments> convertMarkdownToHtml_validMarkdown_returnsHtml_parameters() {
         return Stream.of(
                 Arguments.of("", ""),
-                Arguments.of("Hello, **world**!", "<p>Hello, <strong>world</strong>!</p>")
+                Arguments.of("Hello, **world**!", "<p>Hello, <strong>world</strong>!</p>"),
+                Arguments.of("# Façade", "<h1>Façade</h1>")
         );
     }
 
