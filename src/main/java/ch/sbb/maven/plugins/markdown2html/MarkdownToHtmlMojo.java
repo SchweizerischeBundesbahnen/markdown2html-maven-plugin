@@ -1,6 +1,7 @@
 package ch.sbb.maven.plugins.markdown2html;
 
 import ch.sbb.maven.plugins.markdown2html.github.GitHubHttpClient;
+import ch.sbb.maven.plugins.markdown2html.markdown.MarkdownProcessor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
@@ -11,6 +12,7 @@ import org.apache.maven.plugins.annotations.Parameter;
 import java.io.File;
 import java.io.FileWriter;
 import java.nio.file.Files;
+import java.util.List;
 
 @Slf4j
 @Mojo(name = "convert", defaultPhase = LifecyclePhase.GENERATE_RESOURCES)
@@ -28,6 +30,9 @@ public class MarkdownToHtmlMojo extends AbstractMojo {
     @Parameter(property = "failOnError", defaultValue = "true")
     private boolean failOnError;
 
+    @Parameter(property = "excludeChapters")
+    private List<String> excludeChapters;
+
     public void execute() throws MojoExecutionException {
         try {
             log.info("processing markdown file: {}", inputFile);
@@ -37,7 +42,9 @@ public class MarkdownToHtmlMojo extends AbstractMojo {
 
             String markdown = Files.readString(inputFile.toPath());
 
-            String html = gitHubHttpClient.convertMarkdownToHtml(markdown);
+            String filteredMarkdown = MarkdownProcessor.removeChapter(markdown, excludeChapters);
+
+            String html = gitHubHttpClient.convertMarkdownToHtml(filteredMarkdown);
 
             log.info("writing html to file: {}", outputFile);
             try (FileWriter writer = new FileWriter(outputFile)) {
