@@ -2,8 +2,8 @@
 
 ## Installation to Polarion
 
-To install the extension to Polarion `ch.sbb.polarion.extension.variants-facade-<version>.jar`
-should be copied to `<polarion_home>/polarion/extensions/ch.sbb.polarion.extension.variants-facade/eclipse/plugins`
+To install the extension to Polarion `ch.sbb.polarion.extension.extension-name-<version>.jar`
+should be copied to `<polarion_home>/polarion/extensions/ch.sbb.polarion.extension.extension-name/eclipse/plugins`
 It can be done manually or automated using maven build:
 ```bash
 mvn clean install -P install-to-local-polarion
