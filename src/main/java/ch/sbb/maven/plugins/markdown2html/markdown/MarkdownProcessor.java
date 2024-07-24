@@ -1,7 +1,6 @@
 package ch.sbb.maven.plugins.markdown2html.markdown;
 
 import lombok.experimental.UtilityClass;
-import org.codehaus.plexus.util.StringUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
