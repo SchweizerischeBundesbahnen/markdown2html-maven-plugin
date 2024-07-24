@@ -25,7 +25,7 @@ public class MarkdownProcessor {
     }
 
     public static String removeChapter(@NotNull String markdown, @Nullable String chapterTitle) {
-        if (StringUtils.isEmpty(chapterTitle)) {
+        if (chapterTitle == null || chapterTitle.isEmpty()) {
             return markdown;
         }
 

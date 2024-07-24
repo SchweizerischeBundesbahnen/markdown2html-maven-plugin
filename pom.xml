@@ -60,7 +60,6 @@
 
         <httpclient5.version>5.3.1</httpclient5.version>
         <jackson-databind.version>2.17.2</jackson-databind.version>
-        <plexus-utils.version>4.0.1</plexus-utils.version>
 
         <junit-jupiter-api.version>5.10.3</junit-jupiter-api.version>
         <mockito-core.version>5.12.0</mockito-core.version>
@@ -114,11 +113,6 @@
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-databind</artifactId>
             <version>${jackson-databind.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.codehaus.plexus</groupId>
-            <artifactId>plexus-utils</artifactId>
-            <version>${plexus-utils.version}</version>
         </dependency>
 
         <dependency>
