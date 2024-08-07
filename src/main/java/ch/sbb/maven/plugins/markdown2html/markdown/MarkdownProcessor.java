@@ -1,6 +1,5 @@
 package ch.sbb.maven.plugins.markdown2html.markdown;
 
-import lombok.experimental.UtilityClass;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -8,10 +7,9 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-@UtilityClass
 public class MarkdownProcessor {
 
-    public static String removeChapter(@NotNull String markdown, @Nullable List<String> excludeChapters) {
+    public String removeChapter(@NotNull String markdown, @Nullable List<String> excludeChapters) {
         if (excludeChapters == null) {
             return markdown;
         }
@@ -23,7 +21,7 @@ public class MarkdownProcessor {
         return markdown;
     }
 
-    public static String removeChapter(@NotNull String markdown, @Nullable String chapterTitle) {
+    public String removeChapter(@NotNull String markdown, @Nullable String chapterTitle) {
         if (chapterTitle == null || chapterTitle.isEmpty()) {
             return markdown;
         }

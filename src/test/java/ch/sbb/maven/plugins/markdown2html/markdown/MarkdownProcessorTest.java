@@ -51,7 +51,7 @@ class MarkdownProcessorTest {
                 InputStream expectedInputStream = MarkdownProcessorTest.class.getClassLoader().getResourceAsStream(expectedOutputFilename);
         ) {
             String markdown = new String(inputStream.readAllBytes(), StandardCharsets.UTF_8);
-            String result = MarkdownProcessor.removeChapter(markdown, excludeChapters);
+            String result = new MarkdownProcessor().removeChapter(markdown, excludeChapters);
             String expectedOutput = new String(expectedInputStream.readAllBytes(), StandardCharsets.UTF_8);
             assertEquals(expectedOutput, result);
         }

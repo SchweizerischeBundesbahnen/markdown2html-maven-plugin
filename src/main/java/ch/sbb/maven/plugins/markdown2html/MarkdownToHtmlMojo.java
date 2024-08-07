@@ -1,6 +1,7 @@
 package ch.sbb.maven.plugins.markdown2html;
 
 import ch.sbb.maven.plugins.markdown2html.github.GitHubHttpClient;
+import ch.sbb.maven.plugins.markdown2html.html.HtmlProcessor;
 import ch.sbb.maven.plugins.markdown2html.markdown.MarkdownProcessor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.maven.plugin.AbstractMojo;
@@ -42,9 +43,10 @@ public class MarkdownToHtmlMojo extends AbstractMojo {
 
             String markdown = Files.readString(inputFile.toPath(), StandardCharsets.UTF_8);
 
-            String filteredMarkdown = MarkdownProcessor.removeChapter(markdown, excludeChapters);
+            String filteredMarkdown = new MarkdownProcessor().removeChapter(markdown, excludeChapters);
 
             String html = gitHubHttpClient.convertMarkdownToHtml(filteredMarkdown);
+            html = new HtmlProcessor().addHeadingIds(html);
 
             log.info("writing html to file: {}", outputFile);
 
