@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.3.0](https://github.com/SchweizerischeBundesbahnen/markdown2html-maven-plugin/compare/v1.2.1...v1.3.0) (2024-08-07)
+
+
+### Features
+
+* generate heading ids for anchors ([#20](https://github.com/SchweizerischeBundesbahnen/markdown2html-maven-plugin/issues/20)) ([d3ad491](https://github.com/SchweizerischeBundesbahnen/markdown2html-maven-plugin/commit/d3ad4912d532abcd257795a63d7cc70542d3610a)), closes [#19](https://github.com/SchweizerischeBundesbahnen/markdown2html-maven-plugin/issues/19)
+
 ## [1.2.1](https://github.com/SchweizerischeBundesbahnen/markdown2html-maven-plugin/compare/v1.2.0...v1.2.1) (2024-08-07)
 
 
