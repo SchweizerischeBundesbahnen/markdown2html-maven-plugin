@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.2.1](https://github.com/SchweizerischeBundesbahnen/markdown2html-maven-plugin/compare/v1.2.0...v1.2.1) (2024-08-07)
+
+
+### Bug Fixes
+
+* write html as utf8 content ([#16](https://github.com/SchweizerischeBundesbahnen/markdown2html-maven-plugin/issues/16)) ([b0b9381](https://github.com/SchweizerischeBundesbahnen/markdown2html-maven-plugin/commit/b0b9381647218f5272aee185a0af7339a6a685d0))
+
 ## [1.2.0](https://github.com/SchweizerischeBundesbahnen/markdown2html-maven-plugin/compare/v1.1.0...v1.2.0) (2024-07-24)
 
 
