@@ -1,6 +1,7 @@
 package ch.sbb.maven.plugins.markdown2html;
 
 import ch.sbb.maven.plugins.markdown2html.github.GitHubHttpClient;
+import ch.sbb.maven.plugins.markdown2html.html.HtmlProcessor;
 import ch.sbb.maven.plugins.markdown2html.markdown.MarkdownProcessor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.maven.plugin.AbstractMojo;
@@ -30,27 +31,35 @@ public class MarkdownToHtmlMojo extends AbstractMojo {
     @Parameter(property = "failOnError", defaultValue = "true")
     private boolean failOnError;
 
+    @Parameter(property = "generateHeadingIds", defaultValue = "false")
+    private boolean generateHeadingIds;
+
     @Parameter(property = "excludeChapters")
     private List<String> excludeChapters;
 
     public void execute() throws MojoExecutionException {
         try {
-            log.info("processing markdown file: {}", inputFile);
+            log.info("Processing markdown file: {}", inputFile);
 
             String githubToken = System.getenv(tokenEnvVarName);
             GitHubHttpClient gitHubHttpClient = new GitHubHttpClient(githubToken);
 
             String markdown = Files.readString(inputFile.toPath(), StandardCharsets.UTF_8);
 
-            String filteredMarkdown = MarkdownProcessor.removeChapter(markdown, excludeChapters);
+            String filteredMarkdown = new MarkdownProcessor().removeChapter(markdown, excludeChapters);
 
             String html = gitHubHttpClient.convertMarkdownToHtml(filteredMarkdown);
 
-            log.info("writing html to file: {}", outputFile);
+            if (generateHeadingIds) {
+                log.info("Generating heading IDs");
+                html = new HtmlProcessor().addHeadingIds(html);
+            }
+
+            log.info("Writing html to file: {}", outputFile);
 
             Files.writeString(outputFile.toPath(), html, StandardCharsets.UTF_8);
 
-            log.info("markdown to html successfully converted");
+            log.info("Markdown successfully converted to HTML");
         } catch (Exception e) {
             if (failOnError) {
                 throw new MojoExecutionException("Error processing markdown file", e);

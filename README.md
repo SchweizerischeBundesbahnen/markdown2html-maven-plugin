@@ -34,6 +34,7 @@ This plugin can be used in a maven project by adding the following to the `pom.x
                     <outputFile>${project.basedir}/README.html</outputFile>
                     <tokenEnvVarName>GITHUB_TOKEN</tokenEnvVarName>
                     <failOnError>true</failOnError>
+                    <generateHeadingIds>true</generateHeadingIds>
                 </configuration>
             </plugin>
 ...
