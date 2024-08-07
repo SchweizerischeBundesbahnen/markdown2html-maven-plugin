@@ -10,7 +10,7 @@ import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
 
 import java.io.File;
-import java.io.FileWriter;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.util.List;
 
@@ -40,16 +40,15 @@ public class MarkdownToHtmlMojo extends AbstractMojo {
             String githubToken = System.getenv(tokenEnvVarName);
             GitHubHttpClient gitHubHttpClient = new GitHubHttpClient(githubToken);
 
-            String markdown = Files.readString(inputFile.toPath());
+            String markdown = Files.readString(inputFile.toPath(), StandardCharsets.UTF_8);
 
             String filteredMarkdown = MarkdownProcessor.removeChapter(markdown, excludeChapters);
 
             String html = gitHubHttpClient.convertMarkdownToHtml(filteredMarkdown);
 
             log.info("writing html to file: {}", outputFile);
-            try (FileWriter writer = new FileWriter(outputFile)) {
-                writer.write(html);
-            }
+
+            Files.writeString(outputFile.toPath(), html, StandardCharsets.UTF_8);
 
             log.info("markdown to html successfully converted");
         } catch (Exception e) {
