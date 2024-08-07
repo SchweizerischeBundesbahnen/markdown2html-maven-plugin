@@ -31,6 +31,9 @@ public class MarkdownToHtmlMojo extends AbstractMojo {
     @Parameter(property = "failOnError", defaultValue = "true")
     private boolean failOnError;
 
+    @Parameter(property = "generateHeadingIds", defaultValue = "false")
+    private boolean generateHeadingIds;
+
     @Parameter(property = "excludeChapters")
     private List<String> excludeChapters;
 
@@ -46,7 +49,11 @@ public class MarkdownToHtmlMojo extends AbstractMojo {
             String filteredMarkdown = new MarkdownProcessor().removeChapter(markdown, excludeChapters);
 
             String html = gitHubHttpClient.convertMarkdownToHtml(filteredMarkdown);
-            html = new HtmlProcessor().addHeadingIds(html);
+
+            if (generateHeadingIds) {
+                log.info("generating heading IDs");
+                html = new HtmlProcessor().addHeadingIds(html);
+            }
 
             log.info("writing html to file: {}", outputFile);
 
