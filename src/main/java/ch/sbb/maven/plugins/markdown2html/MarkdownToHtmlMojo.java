@@ -10,8 +10,9 @@ import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
 
 import java.io.File;
-import java.io.FileWriter;
 import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
 import java.util.List;
 
 @Slf4j
@@ -47,9 +48,8 @@ public class MarkdownToHtmlMojo extends AbstractMojo {
             String html = gitHubHttpClient.convertMarkdownToHtml(filteredMarkdown);
 
             log.info("writing html to file: {}", outputFile);
-            try (FileWriter writer = new FileWriter(outputFile)) {
-                writer.write(html);
-            }
+
+            Files.writeString(Paths.get(outputFile.toURI()), html, StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
 
             log.info("markdown to html successfully converted");
         } catch (Exception e) {
