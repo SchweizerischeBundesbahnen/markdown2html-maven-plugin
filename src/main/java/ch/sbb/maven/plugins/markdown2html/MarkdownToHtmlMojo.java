@@ -12,7 +12,6 @@ import org.apache.maven.plugins.annotations.Parameter;
 import java.io.File;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
-import java.nio.file.StandardOpenOption;
 import java.util.List;
 
 @Slf4j
@@ -49,7 +48,7 @@ public class MarkdownToHtmlMojo extends AbstractMojo {
 
             log.info("writing html to file: {}", outputFile);
 
-            Files.writeString(outputFile.toPath(), html, StandardCharsets.UTF_8, StandardOpenOption.CREATE, StandardOpenOption.WRITE, StandardOpenOption.TRUNCATE_EXISTING);
+            Files.writeString(outputFile.toPath(), html, StandardCharsets.UTF_8);
 
             log.info("markdown to html successfully converted");
         } catch (Exception e) {
