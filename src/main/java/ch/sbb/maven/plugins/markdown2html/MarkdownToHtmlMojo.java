@@ -39,7 +39,7 @@ public class MarkdownToHtmlMojo extends AbstractMojo {
 
     public void execute() throws MojoExecutionException {
         try {
-            log.info("processing markdown file: {}", inputFile);
+            log.info("Processing markdown file: {}", inputFile);
 
             String githubToken = System.getenv(tokenEnvVarName);
             GitHubHttpClient gitHubHttpClient = new GitHubHttpClient(githubToken);
@@ -51,15 +51,15 @@ public class MarkdownToHtmlMojo extends AbstractMojo {
             String html = gitHubHttpClient.convertMarkdownToHtml(filteredMarkdown);
 
             if (generateHeadingIds) {
-                log.info("generating heading IDs");
+                log.info("Generating heading IDs");
                 html = new HtmlProcessor().addHeadingIds(html);
             }
 
-            log.info("writing html to file: {}", outputFile);
+            log.info("Writing html to file: {}", outputFile);
 
             Files.writeString(outputFile.toPath(), html, StandardCharsets.UTF_8);
 
-            log.info("markdown to html successfully converted");
+            log.info("Markdown successfully converted to HTML");
         } catch (Exception e) {
             if (failOnError) {
                 throw new MojoExecutionException("Error processing markdown file", e);
