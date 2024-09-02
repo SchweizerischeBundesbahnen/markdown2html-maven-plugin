@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.4.0](https://github.com/SchweizerischeBundesbahnen/markdown2html-maven-plugin/compare/v1.3.0...v1.4.0) (2024-09-02)
+
+
+### Features
+
+* fix provided relative URLs with prefixes and allow add target="_blank" ([#24](https://github.com/SchweizerischeBundesbahnen/markdown2html-maven-plugin/issues/24)) ([61dadc6](https://github.com/SchweizerischeBundesbahnen/markdown2html-maven-plugin/commit/61dadc6f633cfba1dd8c4e0ac36847eaabf9fe23))
+
 ## [1.3.0](https://github.com/SchweizerischeBundesbahnen/markdown2html-maven-plugin/compare/v1.2.1...v1.3.0) (2024-08-07)
 
 
