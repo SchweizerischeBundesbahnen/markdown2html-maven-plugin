@@ -8,7 +8,7 @@ import java.util.regex.Pattern;
 public class LinksProcessor {
 
     public @NotNull String processRelativeLinks(@NotNull String markdown, @NotNull String relativeLinkPrefix) {
-        String markdownLinkPattern = "\\[(?<text>.*?)]\\((?<url>.*?)\\)";
+        String markdownLinkPattern = "\\[(?<text>[^\\]]*)\\]\\((?<url>[^)]+)\\)";
         Pattern pattern = Pattern.compile(markdownLinkPattern);
         Matcher matcher = pattern.matcher(markdown);
 
@@ -45,7 +45,7 @@ public class LinksProcessor {
     }
 
     public @NotNull String processExternalLinks(@NotNull String string) {
-        String regex = "<a\\b(?<attributesbefore>[^>]*?)(?<href>href\\s*=\\s*['\"](?<url>[^'\"]+)['\"])(?<attributesafter>[^>]*?)>";
+        String regex = "<a\\b(?<attributesbefore>[^>]*)(?<href>href\\s*=\\s*['\"](?<url>[^'\"]+)['\"])(?<attributesafter>[^>]*)>";
         Pattern pattern = Pattern.compile(regex, Pattern.CASE_INSENSITIVE);
         Matcher matcher = pattern.matcher(string);
 
