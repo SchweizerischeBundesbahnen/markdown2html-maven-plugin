@@ -61,6 +61,7 @@
         <httpclient5.version>5.3.1</httpclient5.version>
         <jackson-databind.version>2.17.2</jackson-databind.version>
         <icu4j.version>75.1</icu4j.version>
+        <jsoup.version>1.18.1</jsoup.version>
 
         <junit-jupiter-api.version>5.10.3</junit-jupiter-api.version>
         <mockito-core.version>5.12.0</mockito-core.version>
@@ -119,6 +120,11 @@
             <groupId>com.ibm.icu</groupId>
             <artifactId>icu4j</artifactId>
             <version>${icu4j.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.jsoup</groupId>
+            <artifactId>jsoup</artifactId>
+            <version>${jsoup.version}</version>
         </dependency>
 
         <dependency>

@@ -5,7 +5,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class LinksProcessor {
+public class RelativeLinksProcessor {
 
     public @NotNull String processRelativeLinks(@NotNull String markdown, @NotNull String relativeLinkPrefix) {
         String markdownLinkPattern = "\\[(?<text>[^\\]]*)\\]\\((?<url>[^)]+)\\)";
@@ -42,38 +42,5 @@ public class LinksProcessor {
 
         // Replace the markdown link with the HTML <a> tag
         matcher.appendReplacement(result, "<a href=\"" + url + "\">" + linkText + "</a>");
-    }
-
-    public @NotNull String processExternalLinks(@NotNull String string) {
-        String regex = "<a\\b(?<attributesbefore>(?:[^>]*?\\s+)?)(?<href>href\\s*=\\s*['\"](?<url>[^'\"]+)['\"])(?<attributesafter>(?:\\s+[^>]*?)?)>";
-        Pattern pattern = Pattern.compile(regex, Pattern.CASE_INSENSITIVE);
-        Matcher matcher = pattern.matcher(string);
-
-        StringBuilder result = new StringBuilder();
-
-        while (matcher.find()) {
-            String originalTag = matcher.group(0);
-            String attributesBefore = matcher.group("attributesbefore");
-            String href = matcher.group("href");
-            String url = matcher.group("url");
-            String attributesAfter = matcher.group("attributesafter");
-
-            // Check if the URL is absolute
-            if (url.matches("^(http|https|ftp)://.*")) {
-                // Check if the tag already has a target attribute
-                if (!(attributesBefore.contains("target=") || attributesAfter.contains("target="))) {
-                    String modifiedTag = "<a"  + (attributesBefore.isBlank() ? " " : attributesBefore) + href + " target=\"_blank\"" + (attributesAfter.isBlank() ? "" : attributesAfter) + ">";
-                    matcher.appendReplacement(result, modifiedTag);
-                } else {
-                    matcher.appendReplacement(result, originalTag);
-                }
-            } else {
-                matcher.appendReplacement(result, originalTag);
-            }
-        }
-
-        matcher.appendTail(result);
-
-        return result.toString();
     }
 }

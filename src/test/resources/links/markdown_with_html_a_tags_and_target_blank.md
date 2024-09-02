@@ -8,8 +8,8 @@
  - <a href="https://github.com/SchweizerischeBundesbahnen/weasyprint-service" target="_blank">Link 4: absolute URL</a>
  - <a href="ftp://some.host/megafile.ext" target="_blank">Link 5: another absolute URL</a>
  - <a href="http://some.host/megafile.ext" target="_self">Link 6: with already defined target</a>
- - <a href="http://some.host/megafile.ext" target="_blank" referrerpolicy="no-referrer">Link 7: with additional attributes</a>
- - <a name="a_name" href="http://some.host/megafile.ext" target="_blank" referrerpolicy="no-referrer">Link 8: with more additional attributes</a>
+ - <a href="http://some.host/megafile.ext" referrerpolicy="no-referrer" target="_blank">Link 7: with additional attributes</a>
+ - <a name="a_name" href="http://some.host/megafile.ext" referrerpolicy="no-referrer" target="_blank">Link 8: with more additional attributes</a>
 
 ## Chapter
 
