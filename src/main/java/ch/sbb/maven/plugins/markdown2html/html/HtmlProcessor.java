@@ -44,7 +44,7 @@ public class HtmlProcessor {
                 .toLowerCase()
                 .replaceAll("[^\\w\\s-]", "")
                 .replaceAll("[-\\s]+", "-")
-                .replaceAll("^-|-$", "");
+                .replaceAll("(^-)|(-$)", "");
     }
 
     private @NotNull String ensureUniqueId(@NotNull String id) {
