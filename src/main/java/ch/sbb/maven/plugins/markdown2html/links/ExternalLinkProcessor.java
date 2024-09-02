@@ -20,14 +20,18 @@ public class ExternalLinkProcessor {
 
             // Check if the URL is absolute
             if (url.matches("^(http|https|ftp)://.*")) {
-                // Check if the tag already has a target attribute
-                if (!link.hasAttr("target")) {
-                    link.attr("target", "_blank");
-                }
+                addTargetAttribute(link);
             }
         }
 
         // Return the modified HTML as a string while preserving the original formatting
         return document.outerHtml();
+    }
+
+    private static void addTargetAttribute(@NotNull Element link) {
+        // Check if the tag already has a target attribute
+        if (!link.hasAttr("target")) {
+            link.attr("target", "_blank");
+        }
     }
 }
