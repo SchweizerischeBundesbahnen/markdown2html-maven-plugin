@@ -45,7 +45,7 @@ public class LinksProcessor {
     }
 
     public @NotNull String processExternalLinks(@NotNull String string) {
-        String regex = "<a\\b(?<attributesbefore>(?:\\s+[^>]*?)?)(?<href>href\\s*=\\s*['\"](?<url>[^'\"]+)['\"])(?<attributesafter>(?:\\s+[^>]*?)?)>";
+        String regex = "<a\\b(?<attributesbefore>(?:[^>]*?\\s+)?)(?<href>href\\s*=\\s*['\"](?<url>[^'\"]+)['\"])(?<attributesafter>(?:\\s+[^>]*?)?)>";
         Pattern pattern = Pattern.compile(regex, Pattern.CASE_INSENSITIVE);
         Matcher matcher = pattern.matcher(string);
 
