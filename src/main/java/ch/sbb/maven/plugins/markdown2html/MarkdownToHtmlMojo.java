@@ -2,6 +2,8 @@ package ch.sbb.maven.plugins.markdown2html;
 
 import ch.sbb.maven.plugins.markdown2html.github.GitHubHttpClient;
 import ch.sbb.maven.plugins.markdown2html.html.HtmlProcessor;
+import ch.sbb.maven.plugins.markdown2html.links.ExternalLinkProcessor;
+import ch.sbb.maven.plugins.markdown2html.links.RelativeLinksProcessor;
 import ch.sbb.maven.plugins.markdown2html.markdown.MarkdownProcessor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.maven.plugin.AbstractMojo;
@@ -37,6 +39,12 @@ public class MarkdownToHtmlMojo extends AbstractMojo {
     @Parameter(property = "excludeChapters")
     private List<String> excludeChapters;
 
+    @Parameter(property = "relativeLinkPrefix")
+    private String relativeLinkPrefix;
+
+    @Parameter(property = "openExternalLinksInNewTab", defaultValue = "false")
+    private boolean openExternalLinksInNewTab;
+
     public void execute() throws MojoExecutionException {
         try {
             log.info("Processing markdown file: {}", inputFile);
@@ -48,7 +56,17 @@ public class MarkdownToHtmlMojo extends AbstractMojo {
 
             String filteredMarkdown = new MarkdownProcessor().removeChapter(markdown, excludeChapters);
 
+            if (relativeLinkPrefix != null && !relativeLinkPrefix.isEmpty()) {
+                log.info("Processing relative links with prefix: {}", relativeLinkPrefix);
+                filteredMarkdown = new RelativeLinksProcessor().processRelativeLinks(filteredMarkdown, relativeLinkPrefix);
+            }
+
             String html = gitHubHttpClient.convertMarkdownToHtml(filteredMarkdown);
+
+            if (openExternalLinksInNewTab) {
+                log.info("Make external links opening in new tab");
+                html = new ExternalLinkProcessor().processExternalLinks(html);
+            }
 
             if (generateHeadingIds) {
                 log.info("Generating heading IDs");
