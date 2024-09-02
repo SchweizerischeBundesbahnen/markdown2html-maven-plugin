@@ -35,6 +35,8 @@ This plugin can be used in a maven project by adding the following to the `pom.x
                     <tokenEnvVarName>GITHUB_TOKEN</tokenEnvVarName>
                     <failOnError>true</failOnError>
                     <generateHeadingIds>true</generateHeadingIds>
+                    <relativeLinkPrefix>https://localhost:9090/</relativeLinkPrefix>
+                    <openExternalLinksInNewTab>true</openExternalLinksInNewTab>
                 </configuration>
             </plugin>
 ...

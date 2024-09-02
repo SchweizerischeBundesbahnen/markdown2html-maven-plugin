@@ -17,7 +17,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class MarkdownProcessorTest {
 
-    public static final String INPUT_MD = "input.md";
+    public static final String INPUT_MD = "markdown/input.md";
 
     private static Stream<Arguments> provideStringsForRemoveChapterFromInputMarkdown() {
         return Stream.of(
@@ -28,18 +28,18 @@ class MarkdownProcessorTest {
                 Arguments.of(INPUT_MD, List.of("# Polarion configuration"), INPUT_MD),
                 Arguments.of(INPUT_MD, List.of("### Polarion configuration"), INPUT_MD),
 
-                Arguments.of(INPUT_MD, List.of("## Build"), "expected/without_build.md"),
-                Arguments.of(INPUT_MD, List.of("## Build", "## Installation to Polarion"), "expected/without_build_and_installation.md"),
-                Arguments.of(INPUT_MD, List.of("## Build", "## Installation to Polarion", "## Changelog"), "expected/without_build_installation_and_changelog.md"),
-                Arguments.of(INPUT_MD, List.of("## Build", "# Non-Exising Chapter"), "expected/without_build.md"),
+                Arguments.of(INPUT_MD, List.of("## Build"), "markdown/expected/without_build.md"),
+                Arguments.of(INPUT_MD, List.of("## Build", "## Installation to Polarion"), "markdown/expected/without_build_and_installation.md"),
+                Arguments.of(INPUT_MD, List.of("## Build", "## Installation to Polarion", "## Changelog"), "markdown/expected/without_build_installation_and_changelog.md"),
+                Arguments.of(INPUT_MD, List.of("## Build", "# Non-Exising Chapter"), "markdown/expected/without_build.md"),
 
-                Arguments.of(INPUT_MD, List.of("# Extension Name"), "expected/empty.md"),
+                Arguments.of(INPUT_MD, List.of("# Extension Name"), "markdown/expected/empty.md"),
 
-                Arguments.of(INPUT_MD, List.of("### Configuration 2"), "expected/without_configuration2.md"),
-                Arguments.of(INPUT_MD, List.of("### Configuration 1", "### Configuration 2"), "expected/without_configuration1_and_configuration2.md"),
+                Arguments.of(INPUT_MD, List.of("### Configuration 2"), "markdown/expected/without_configuration2.md"),
+                Arguments.of(INPUT_MD, List.of("### Configuration 1", "### Configuration 2"), "markdown/expected/without_configuration1_and_configuration2.md"),
 
-                Arguments.of(INPUT_MD, List.of("### Configuration 1", "## Polarion configuration"), "expected/without_polarion_configuration.md"),
-                Arguments.of(INPUT_MD, List.of("## Polarion configuration", "### Configuration 1"), "expected/without_polarion_configuration.md")
+                Arguments.of(INPUT_MD, List.of("### Configuration 1", "## Polarion configuration"), "markdown/expected/without_polarion_configuration.md"),
+                Arguments.of(INPUT_MD, List.of("## Polarion configuration", "### Configuration 1"), "markdown/expected/without_polarion_configuration.md")
         );
     }
 
