@@ -45,6 +45,12 @@ public class MarkdownToHtmlMojo extends AbstractMojo {
     @Parameter(property = "openExternalLinksInNewTab", defaultValue = "false")
     private boolean openExternalLinksInNewTab;
 
+    @Parameter(property = "removeLinesWithStrings")
+    private List<String> removeLinesWithStrings;
+
+    @Parameter(property = "removeLinesUsingPatterns")
+    private List<String> removeLinesUsingPatterns;
+
     public void execute() throws MojoExecutionException {
         try {
             log.info("Processing markdown file: {}", inputFile);
@@ -54,7 +60,10 @@ public class MarkdownToHtmlMojo extends AbstractMojo {
 
             String markdown = Files.readString(inputFile.toPath(), StandardCharsets.UTF_8);
 
-            String filteredMarkdown = new MarkdownProcessor().removeChapter(markdown, excludeChapters);
+            MarkdownProcessor markdownProcessor = new MarkdownProcessor();
+            String filteredMarkdown = markdownProcessor.removeChapter(markdown, excludeChapters);
+            filteredMarkdown = markdownProcessor.removeLinesContainedSubstrings(filteredMarkdown, removeLinesWithStrings);
+            filteredMarkdown = markdownProcessor.removeLinesUsingRegExPatterns(filteredMarkdown, removeLinesUsingPatterns);
 
             if (relativeLinkPrefix != null && !relativeLinkPrefix.isEmpty()) {
                 log.info("Processing relative links with prefix: {}", relativeLinkPrefix);
