@@ -35,8 +35,28 @@ This plugin can be used in a maven project by adding the following to the `pom.x
                     <tokenEnvVarName>GITHUB_TOKEN</tokenEnvVarName>
                     <failOnError>true</failOnError>
                     <generateHeadingIds>true</generateHeadingIds>
+                    <excludeChapters>
+                        <excludeChapter>## Build</excludeChapter>
+                        <excludeChapter>## Installation to Polarion</excludeChapter>
+                        <excludeChapter>## Changelog</excludeChapter>
+                    </excludeChapters>
                     <relativeLinkPrefix>https://localhost:9090/</relativeLinkPrefix>
                     <openExternalLinksInNewTab>true</openExternalLinksInNewTab>
+                    <removeLinesWithStrings>
+                        <removeLinesWithString>https://sonarcloud.io/api/project_badges/</removeLinesWithString>
+                    </removeLinesWithStrings>
+                    <removeLinesUsingPatterns>
+                        <removeLinesUsingPattern>(?m)^.*\[Quality Gate Status\].*(\R|)</removeLinesUsingPattern>
+                        <removeLinesUsingPattern>(?m)^.*\[Bugs\].*(\R|)</removeLinesUsingPattern>
+                        <removeLinesUsingPattern>(?m)^.*\[Code Smells\].*(\R|)</removeLinesUsingPattern>
+                        <removeLinesUsingPattern>(?m)^.*\[Coverage\].*(\R|)</removeLinesUsingPattern>
+                        <removeLinesUsingPattern>(?m)^.*\[Duplicated Lines \(%\)\].*(\R|)</removeLinesUsingPattern>
+                        <removeLinesUsingPattern>(?m)^.*\[Lines of Code\].*(\R|)</removeLinesUsingPattern>
+                        <removeLinesUsingPattern>(?m)^.*\[Reliability Rating\].*(\R|)</removeLinesUsingPattern>
+                        <removeLinesUsingPattern>(?m)^.*\[Security Rating\].*(\R|)</removeLinesUsingPattern>
+                        <removeLinesUsingPattern>(?m)^.*\[Maintainability Rating\].*(\R|)</removeLinesUsingPattern>
+                        <removeLinesUsingPattern>(?m)^.*\[Vulnerabilities\].*(\R|)</removeLinesUsingPattern>
+                    </removeLinesUsingPatterns>
                 </configuration>
             </plugin>
 ...
