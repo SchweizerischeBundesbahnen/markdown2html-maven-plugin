@@ -62,7 +62,7 @@ public class MarkdownToHtmlMojo extends AbstractMojo {
 
             MarkdownProcessor markdownProcessor = new MarkdownProcessor();
             String filteredMarkdown = markdownProcessor.removeChapter(markdown, excludeChapters);
-            filteredMarkdown = markdownProcessor.removeLinesContainedSubstrings(filteredMarkdown, removeLinesWithStrings);
+            filteredMarkdown = markdownProcessor.removeLinesContainingSubstrings(filteredMarkdown, removeLinesWithStrings);
             filteredMarkdown = markdownProcessor.removeLinesUsingRegExPatterns(filteredMarkdown, removeLinesUsingPatterns);
 
             if (relativeLinkPrefix != null && !relativeLinkPrefix.isEmpty()) {

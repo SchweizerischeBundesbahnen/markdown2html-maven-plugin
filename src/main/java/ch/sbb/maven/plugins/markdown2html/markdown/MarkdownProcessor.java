@@ -47,7 +47,7 @@ public class MarkdownProcessor {
         return result.replaceAll("(?m)^\\s*\\R", "\n").trim();
     }
 
-    public @NotNull String removeLinesContainedSubstrings(@NotNull String markdown, @Nullable List<String> lineSubstrings) {
+    public @NotNull String removeLinesContainingSubstrings(@NotNull String markdown, @Nullable List<String> lineSubstrings) {
         if (lineSubstrings == null) {
             return markdown;
         }

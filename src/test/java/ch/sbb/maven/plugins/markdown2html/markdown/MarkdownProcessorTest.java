@@ -57,7 +57,7 @@ class MarkdownProcessorTest {
         }
     }
 
-    private static Stream<Arguments> provideStringsForRemoveLinesContainedSubstringsFromInputMarkdown() {
+    private static Stream<Arguments> provideStringsForRemoveLinesContainingSubstringsFromInputMarkdown() {
         return Stream.of(
                 Arguments.of(INPUT_MD, null, INPUT_MD),
                 Arguments.of(INPUT_MD, Collections.emptyList(), INPUT_MD),
@@ -89,14 +89,14 @@ class MarkdownProcessorTest {
     }
 
     @ParameterizedTest
-    @MethodSource("provideStringsForRemoveLinesContainedSubstringsFromInputMarkdown")
-    void testRemoveLinesContainedSubstringsFromInputMarkdown(@NotNull String inputFilename, @Nullable List<String> linePrefixes, @NotNull String expectedOutputFilename) throws IOException {
+    @MethodSource("provideStringsForRemoveLinesContainingSubstringsFromInputMarkdown")
+    void testRemoveLinesContainingSubstringsFromInputMarkdown(@NotNull String inputFilename, @Nullable List<String> linePrefixes, @NotNull String expectedOutputFilename) throws IOException {
         try (
                 InputStream inputStream = MarkdownProcessorTest.class.getClassLoader().getResourceAsStream(inputFilename);
                 InputStream expectedInputStream = MarkdownProcessorTest.class.getClassLoader().getResourceAsStream(expectedOutputFilename);
         ) {
             String markdown = new String(inputStream.readAllBytes(), StandardCharsets.UTF_8);
-            String result = new MarkdownProcessor().removeLinesContainedSubstrings(markdown, linePrefixes);
+            String result = new MarkdownProcessor().removeLinesContainingSubstrings(markdown, linePrefixes);
             String expectedOutput = new String(expectedInputStream.readAllBytes(), StandardCharsets.UTF_8);
             assertEquals(expectedOutput, result);
         }
