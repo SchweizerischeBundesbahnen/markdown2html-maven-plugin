@@ -1,5 +1,18 @@
 # Changelog
 
+## [1.5.0](https://github.com/SchweizerischeBundesbahnen/markdown2html-maven-plugin/compare/v1.4.0...v1.5.0) (2024-10-24)
+
+
+### Features
+
+* filtering markdown lines ([#28](https://github.com/SchweizerischeBundesbahnen/markdown2html-maven-plugin/issues/28)) ([8221f1d](https://github.com/SchweizerischeBundesbahnen/markdown2html-maven-plugin/commit/8221f1d517a18996c3d3f7f1afa6694af0f7ea9d)), closes [#27](https://github.com/SchweizerischeBundesbahnen/markdown2html-maven-plugin/issues/27)
+
+
+### Bug Fixes
+
+* **deps:** update dependency com.fasterxml.jackson.core:jackson-databind to v2.18.0 ([#42](https://github.com/SchweizerischeBundesbahnen/markdown2html-maven-plugin/issues/42)) ([11106bc](https://github.com/SchweizerischeBundesbahnen/markdown2html-maven-plugin/commit/11106bc3cf6085641eb39f3994e92a6b0e08e34b))
+* **deps:** update dependency org.apache.httpcomponents.client5:httpclient5 to v5.4 ([#41](https://github.com/SchweizerischeBundesbahnen/markdown2html-maven-plugin/issues/41)) ([9861f89](https://github.com/SchweizerischeBundesbahnen/markdown2html-maven-plugin/commit/9861f890460045c8eabb5d273f29d3b9482e2875))
+
 ## [1.4.0](https://github.com/SchweizerischeBundesbahnen/markdown2html-maven-plugin/compare/v1.3.0...v1.4.0) (2024-09-02)
 
 
