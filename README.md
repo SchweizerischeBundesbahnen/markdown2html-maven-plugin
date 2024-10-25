@@ -1,3 +1,14 @@
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=SchweizerischeBundesbahnen_markdown2html-maven-plugin&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=SchweizerischeBundesbahnen_markdown2html-maven-plugin)
+[![Bugs](https://sonarcloud.io/api/project_badges/measure?project=SchweizerischeBundesbahnen_markdown2html-maven-plugin&metric=bugs)](https://sonarcloud.io/summary/new_code?id=SchweizerischeBundesbahnen_markdown2html-maven-plugin)
+[![Code Smells](https://sonarcloud.io/api/project_badges/measure?project=SchweizerischeBundesbahnen_markdown2html-maven-plugin&metric=code_smells)](https://sonarcloud.io/summary/new_code?id=SchweizerischeBundesbahnen_markdown2html-maven-plugin)
+[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=SchweizerischeBundesbahnen_markdown2html-maven-plugin&metric=coverage)](https://sonarcloud.io/summary/new_code?id=SchweizerischeBundesbahnen_markdown2html-maven-plugin)
+[![Duplicated Lines (%)](https://sonarcloud.io/api/project_badges/measure?project=SchweizerischeBundesbahnen_markdown2html-maven-plugin&metric=duplicated_lines_density)](https://sonarcloud.io/summary/new_code?id=SchweizerischeBundesbahnen_markdown2html-maven-plugin)
+[![Lines of Code](https://sonarcloud.io/api/project_badges/measure?project=SchweizerischeBundesbahnen_markdown2html-maven-plugin&metric=ncloc)](https://sonarcloud.io/summary/new_code?id=SchweizerischeBundesbahnen_markdown2html-maven-plugin)
+[![Reliability Rating](https://sonarcloud.io/api/project_badges/measure?project=SchweizerischeBundesbahnen_markdown2html-maven-plugin&metric=reliability_rating)](https://sonarcloud.io/summary/new_code?id=SchweizerischeBundesbahnen_markdown2html-maven-plugin)
+[![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=SchweizerischeBundesbahnen_markdown2html-maven-plugin&metric=security_rating)](https://sonarcloud.io/summary/new_code?id=SchweizerischeBundesbahnen_markdown2html-maven-plugin)
+[![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=SchweizerischeBundesbahnen_markdown2html-maven-plugin&metric=sqale_rating)](https://sonarcloud.io/summary/new_code?id=SchweizerischeBundesbahnen_markdown2html-maven-plugin)
+[![Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=SchweizerischeBundesbahnen_markdown2html-maven-plugin&metric=vulnerabilities)](https://sonarcloud.io/summary/new_code?id=SchweizerischeBundesbahnen_markdown2html-maven-plugin)
+
 # Markdown to HTML Maven Plugin
 
 This Maven plugin uses GitHub API for converting Markdown to HTML.
