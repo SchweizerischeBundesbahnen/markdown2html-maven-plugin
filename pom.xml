@@ -58,7 +58,7 @@
         <maven-plugin-api.version>3.9.8</maven-plugin-api.version>
         <lombok.version>1.18.34</lombok.version>
 
-        <httpclient5.version>5.4</httpclient5.version>
+        <httpclient5.version>5.4.1</httpclient5.version>
         <jackson-databind.version>2.18.0</jackson-databind.version>
         <icu4j.version>75.1</icu4j.version>
         <jsoup.version>1.18.1</jsoup.version>
