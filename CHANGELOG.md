@@ -1,5 +1,16 @@
 # Changelog
 
+## [1.5.1](https://github.com/SchweizerischeBundesbahnen/markdown2html-maven-plugin/compare/v1.5.0...v1.5.1) (2024-12-05)
+
+
+### Bug Fixes
+
+* **deps:** update dependency com.fasterxml.jackson.core:jackson-databind to v2.18.1 ([460b03a](https://github.com/SchweizerischeBundesbahnen/markdown2html-maven-plugin/commit/460b03a6b264e353d6202b9737b9ed4517ea78f8))
+* **deps:** update dependency com.fasterxml.jackson.core:jackson-databind to v2.18.2 ([58357c1](https://github.com/SchweizerischeBundesbahnen/markdown2html-maven-plugin/commit/58357c16c1c76586d1729541415f416987353ae2))
+* **deps:** update dependency org.apache.httpcomponents.client5:httpclient5 to v5.4.1 ([248f878](https://github.com/SchweizerischeBundesbahnen/markdown2html-maven-plugin/commit/248f8781db00288bddc10ecaf597a8327ea3944c))
+* **deps:** update dependency org.jsoup:jsoup to v1.18.2 ([c41f7f5](https://github.com/SchweizerischeBundesbahnen/markdown2html-maven-plugin/commit/c41f7f594e5b6ae36a42cd437bb160bbd5494291))
+* **deps:** update dependency org.jsoup:jsoup to v1.18.3 ([c3ad29a](https://github.com/SchweizerischeBundesbahnen/markdown2html-maven-plugin/commit/c3ad29a2d260c688d379e78ec0a82c31dcba21db))
+
 ## [1.5.0](https://github.com/SchweizerischeBundesbahnen/markdown2html-maven-plugin/compare/v1.4.0...v1.5.0) (2024-10-24)
 
 
