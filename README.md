@@ -68,6 +68,7 @@ This plugin can be used in a maven project by adding the following to the `pom.x
                         <removeLinesUsingPattern>(?m)^.*\[Maintainability Rating\].*(\R|)</removeLinesUsingPattern>
                         <removeLinesUsingPattern>(?m)^.*\[Vulnerabilities\].*(\R|)</removeLinesUsingPattern>
                     </removeLinesUsingPatterns>
+                    <imageProcessingType>EMBED</imageProcessingType>
                 </configuration>
             </plugin>
 ...
