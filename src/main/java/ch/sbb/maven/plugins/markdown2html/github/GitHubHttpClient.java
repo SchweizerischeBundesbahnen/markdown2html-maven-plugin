@@ -48,7 +48,7 @@ public class GitHubHttpClient {
             if (statusCode == HttpStatus.SC_OK) {
                 return EntityUtils.toString(response.getEntity());
             } else {
-                throw new IllegalStateException("HTTP request failed with status: " + statusCode);
+                throw new IllegalStateException("HTTP request failed with status: " + statusCode + ", reason: " + response.getReasonPhrase());
             }
         };
 
