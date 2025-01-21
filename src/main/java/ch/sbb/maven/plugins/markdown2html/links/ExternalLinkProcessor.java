@@ -1,5 +1,6 @@
 package ch.sbb.maven.plugins.markdown2html.links;
 
+import ch.sbb.maven.plugins.markdown2html.util.Utils;
 import org.jetbrains.annotations.NotNull;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -19,7 +20,7 @@ public class ExternalLinkProcessor {
             String url = link.attr("href");
 
             // Check if the URL is absolute
-            if (url.matches("^(http|https|ftp)://.*")) {
+            if (Utils.isAbsoluteUrl(url)) {
                 addTargetAttribute(link);
             }
         }
