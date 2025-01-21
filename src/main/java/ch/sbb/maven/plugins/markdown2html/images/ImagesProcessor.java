@@ -2,7 +2,6 @@ package ch.sbb.maven.plugins.markdown2html.images;
 
 import ch.sbb.maven.plugins.markdown2html.util.Resource;
 import ch.sbb.maven.plugins.markdown2html.util.Utils;
-import lombok.SneakyThrows;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Base64;
@@ -27,7 +26,6 @@ public class ImagesProcessor {
                 .replaceAll(match -> match.group(0).replace(match.group(2), loadAndGetAsBase64Content(match.group(2))));
     }
 
-    @SneakyThrows
     private String loadAndGetAsBase64Content(String urlOrPath) {
         Resource resource = Utils.isAbsoluteUrl(urlOrPath) ? Utils.getResourceByURL(urlOrPath) : Utils.getResourceByPath(urlOrPath);
         String base64Content = Base64.getEncoder().encodeToString(resource.getContent());
