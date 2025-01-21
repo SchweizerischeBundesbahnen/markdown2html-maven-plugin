@@ -14,12 +14,14 @@ import static org.mockito.Mockito.mockStatic;
 class ImagesProcessorTest {
 
     @Test
+    @SuppressWarnings("java:S2699")
     void testRelativeUrlsProcessing() {
         TestCommons.runFunctionTestUsingFiles("images/markdown_images.md", "images/markdown_images_result.md",
                 markdown -> new ImagesProcessor().processRelativeUrls(markdown, "http://localhost:8080"));
     }
 
     @Test
+    @SuppressWarnings("java:S2699")
     void testEmbeddingImages() {
         try (MockedStatic<Utils> mockScopeUtils = mockStatic(Utils.class)) {
             mockScopeUtils.when(() -> Utils.isAbsoluteUrl(anyString())).thenCallRealMethod();

@@ -77,7 +77,7 @@ class UtilsTest {
     }
 
     @Test
-    public void testGetResourceByURL_Success() throws Exception {
+    void testGetResourceByURL() throws Exception {
         String testUrl = "http://example.com/resource";
         byte[] responseBytes = "test data".getBytes();
         String contentType = "application/octet-stream";
@@ -90,7 +90,7 @@ class UtilsTest {
         when(mockHttpResponse.getEntity()).thenReturn(new org.apache.hc.core5.http.io.entity.AbstractHttpEntity(contentType, null) {
             @Override
             public void close() {
-
+                // do nothing
             }
 
             @Override
@@ -129,7 +129,7 @@ class UtilsTest {
     }
 
     @Test
-    public void testGetResourceByURL_Failure() throws Exception {
+    void testGetResourceByURLThrowsError() throws Exception {
         String testUrl = "http://example.com/resource";
 
         CloseableHttpClient mockHttpClient = mock(CloseableHttpClient.class);

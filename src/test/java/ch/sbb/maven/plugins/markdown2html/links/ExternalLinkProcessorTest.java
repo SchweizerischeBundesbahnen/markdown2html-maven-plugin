@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 class ExternalLinkProcessorTest {
 
     @Test
+    @SuppressWarnings("java:S2699")
     void testExternalLinksProcessing() {
         TestCommons.runFunctionTestUsingFiles("links/markdown_with_html_a_tags.md", "links/markdown_with_html_a_tags_and_target_blank.md",
                 markdown -> new ExternalLinkProcessor().processExternalLinks(markdown));
