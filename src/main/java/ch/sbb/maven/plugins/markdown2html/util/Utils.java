@@ -1,16 +1,16 @@
-package ch.sbb.maven.plugins.markdown2html.markdown;
+package ch.sbb.maven.plugins.markdown2html.util;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
 import lombok.SneakyThrows;
 import lombok.experimental.UtilityClass;
+import org.apache.hc.client5.http.classic.methods.HttpGet;
+import org.apache.hc.client5.http.impl.classic.CloseableHttpClient;
+import org.apache.hc.client5.http.impl.classic.HttpClients;
+import org.apache.hc.core5.http.HttpStatus;
+import org.apache.hc.core5.http.io.HttpClientResponseHandler;
+import org.apache.hc.core5.http.io.entity.EntityUtils;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.nio.file.Files;
 
 @UtilityClass
@@ -40,16 +40,17 @@ public class Utils {
 
     @SneakyThrows
     public Resource getResourceByURL(String url) {
-        HttpURLConnection connection = (HttpURLConnection) new URL(url).openConnection();
-        connection.setRequestMethod("GET");
-        connection.connect();
-
-        if (connection.getResponseCode() != HttpURLConnection.HTTP_OK) {
-            throw new IOException("Failed to fetch image: " + connection.getResponseMessage());
-        }
-
-        try (InputStream inputStream = connection.getInputStream()) {
-            return new Resource(inputStream.readAllBytes(), connection.getContentType());
+        try (CloseableHttpClient client = HttpClients.createDefault()) {
+            HttpGet request = new HttpGet(url);
+            HttpClientResponseHandler<Resource> responseHandler = response -> {
+                int statusCode = response.getCode();
+                if (statusCode == HttpStatus.SC_OK) {
+                    return new Resource(EntityUtils.toByteArray(response.getEntity()), response.getEntity().getContentType());
+                } else {
+                    throw new IllegalStateException("HTTP request failed with status: " + statusCode + ", reason: " + response.getReasonPhrase());
+                }
+            };
+            return client.execute(request, responseHandler);
         }
     }
 
@@ -60,12 +61,5 @@ public class Utils {
             throw new FileNotFoundException("File not found: " + path);
         }
         return new Resource(Files.readAllBytes(file.toPath()), Files.probeContentType(file.toPath()));
-    }
-
-    @Getter
-    @AllArgsConstructor
-    public static class Resource {
-        private byte[] content;
-        private String mimeType;
     }
 }

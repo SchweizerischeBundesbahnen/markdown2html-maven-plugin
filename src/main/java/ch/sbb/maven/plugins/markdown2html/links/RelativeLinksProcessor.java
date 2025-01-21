@@ -1,6 +1,6 @@
 package ch.sbb.maven.plugins.markdown2html.links;
 
-import ch.sbb.maven.plugins.markdown2html.markdown.Utils;
+import ch.sbb.maven.plugins.markdown2html.util.Utils;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.regex.Pattern;

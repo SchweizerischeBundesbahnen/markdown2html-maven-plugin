@@ -1,12 +1,20 @@
 package ch.sbb.maven.plugins.markdown2html.markdown;
 
+import ch.sbb.maven.plugins.markdown2html.util.Resource;
+import ch.sbb.maven.plugins.markdown2html.util.Utils;
+import org.apache.hc.client5.http.classic.methods.HttpGet;
+import org.apache.hc.client5.http.impl.classic.CloseableHttpClient;
+import org.apache.hc.client5.http.impl.classic.CloseableHttpResponse;
+import org.apache.hc.client5.http.impl.classic.HttpClients;
+import org.apache.hc.core5.http.HttpStatus;
+import org.apache.hc.core5.http.io.HttpClientResponseHandler;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
-import org.mockito.MockedConstruction;
+import org.mockito.MockedStatic;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.net.HttpURLConnection;
-import java.net.URL;
+import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
@@ -69,48 +77,80 @@ class UtilsTest {
     }
 
     @Test
-    void testGetResourceByURL() throws IOException {
-        HttpURLConnection mockConnection = mock(HttpURLConnection.class);
-        String testUrl = "https://example.com/image.jpg";
-        byte[] testContent = "test content".getBytes();
-        String contentType = "image/jpeg";
+    public void testGetResourceByURL_Success() throws Exception {
+        String testUrl = "http://example.com/resource";
+        byte[] responseBytes = "test data".getBytes();
+        String contentType = "application/octet-stream";
 
-        try (MockedConstruction<URL> mocked = mockConstruction(URL.class,
-                (mock, context) -> {
-                    when(mock.openConnection()).thenReturn(mockConnection);
-                })) {
+        CloseableHttpClient mockHttpClient = mock(CloseableHttpClient.class);
+        CloseableHttpResponse mockHttpResponse = mock(CloseableHttpResponse.class);
 
-            when(mockConnection.getResponseCode()).thenReturn(HttpURLConnection.HTTP_OK);
-            when(mockConnection.getContentType()).thenReturn(contentType);
-            when(mockConnection.getInputStream()).thenReturn(new java.io.ByteArrayInputStream(testContent));
+        // Simulate the HTTP response
+        when(mockHttpResponse.getCode()).thenReturn(HttpStatus.SC_OK);
+        when(mockHttpResponse.getEntity()).thenReturn(new org.apache.hc.core5.http.io.entity.AbstractHttpEntity(contentType, null) {
+            @Override
+            public void close() {
 
-            Utils.Resource resource = Utils.getResourceByURL(testUrl);
+            }
 
-            assertNotNull(resource);
-            assertArrayEquals(testContent, resource.getContent());
-            assertEquals(contentType, resource.getMimeType());
+            @Override
+            public InputStream getContent() {
+                return new ByteArrayInputStream(responseBytes);
+            }
 
-            verify(mockConnection).setRequestMethod("GET");
-            verify(mockConnection).connect();
+            @Override
+            public boolean isStreaming() {
+                return true;
+            }
+
+            @Override
+            public long getContentLength() {
+                return responseBytes.length;
+            }
+        });
+
+        // Mock the HttpClient to execute the request
+        when(mockHttpClient.execute(any(HttpGet.class), any(HttpClientResponseHandler.class))).thenAnswer(invocation -> {
+            HttpClientResponseHandler<Resource> handler = invocation.getArgument(1);
+            return handler.handleResponse(mockHttpResponse);
+        });
+
+        try (MockedStatic<HttpClients> mockedHttpClients = mockStatic(HttpClients.class)) {
+            mockedHttpClients.when(HttpClients::createDefault).thenReturn(mockHttpClient);
+
+            // Call the method under test
+            Resource result = Utils.getResourceByURL(testUrl);
+
+            // Assertions
+            assertNotNull(result);
+            assertArrayEquals(responseBytes, result.getContent());
+            assertEquals(contentType, result.getMimeType());
         }
     }
 
     @Test
-    void testGetResourceByURLThrowsError() throws IOException {
-        HttpURLConnection mockConnection = mock(HttpURLConnection.class);
-        String testUrl = "https://example.com/notfound.jpg";
+    public void testGetResourceByURL_Failure() throws Exception {
+        String testUrl = "http://example.com/resource";
 
-        try (MockedConstruction<URL> mocked = mockConstruction(URL.class,
-                (mock, context) -> {
-                    when(mock.openConnection()).thenReturn(mockConnection);
-                })) {
+        CloseableHttpClient mockHttpClient = mock(CloseableHttpClient.class);
+        CloseableHttpResponse mockHttpResponse = mock(CloseableHttpResponse.class);
+        when(mockHttpResponse.getCode()).thenReturn(HttpStatus.SC_INTERNAL_SERVER_ERROR);
 
-            when(mockConnection.getResponseCode()).thenReturn(HttpURLConnection.HTTP_NOT_FOUND);
-            when(mockConnection.getResponseMessage()).thenReturn("Not Found");
+        // Mock the HttpClient to execute the request
+        when(mockHttpClient.execute(any(HttpGet.class), any(HttpClientResponseHandler.class))).thenAnswer(invocation -> {
+            HttpClientResponseHandler<Resource> handler = invocation.getArgument(1);
+            return handler.handleResponse(mockHttpResponse);
+        });
 
-            IOException exception = assertThrows(IOException.class,
-                    () -> Utils.getResourceByURL(testUrl));
-            assertTrue(exception.getMessage().contains("Failed to fetch image"));
+        // Mock the static method HttpClients.createDefault()
+        try (MockedStatic<HttpClients> mockedHttpClients = mockStatic(HttpClients.class)) {
+            mockedHttpClients.when(HttpClients::createDefault).thenReturn(mockHttpClient);
+
+            // Assert that an exception is thrown
+            IllegalStateException thrown = assertThrows(IllegalStateException.class, () -> {
+                Utils.getResourceByURL(testUrl);
+            });
+            assertTrue(thrown.getMessage().contains("HTTP request failed"));
         }
     }
 
@@ -120,7 +160,7 @@ class UtilsTest {
         Path testFile = tempDir.resolve("test.txt");
         Files.write(testFile, testContent.getBytes());
 
-        Utils.Resource resource = Utils.getResourceByPath(testFile.toString());
+        Resource resource = Utils.getResourceByPath(testFile.toString());
 
         assertNotNull(resource);
         assertEquals(testContent, new String(resource.getContent()));
@@ -135,14 +175,4 @@ class UtilsTest {
                 () -> Utils.getResourceByPath(nonExistentPath));
     }
 
-    @Test
-    void testResource() {
-        byte[] content = "test".getBytes();
-        String mimeType = "text/plain";
-
-        Utils.Resource resource = new Utils.Resource(content, mimeType);
-
-        assertArrayEquals(content, resource.getContent());
-        assertEquals(mimeType, resource.getMimeType());
-    }
 }

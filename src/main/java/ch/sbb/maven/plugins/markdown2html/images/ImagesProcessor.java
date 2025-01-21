@@ -1,6 +1,7 @@
 package ch.sbb.maven.plugins.markdown2html.images;
 
-import ch.sbb.maven.plugins.markdown2html.markdown.Utils;
+import ch.sbb.maven.plugins.markdown2html.util.Resource;
+import ch.sbb.maven.plugins.markdown2html.util.Utils;
 import lombok.SneakyThrows;
 import org.jetbrains.annotations.NotNull;
 
@@ -20,7 +21,7 @@ public class ImagesProcessor {
     }
 
     public @NotNull String embedImages(@NotNull String html) {
-        String imgSrcPattern = "<img[^<>]*src=([\"'])(?<url>[^(\"|')]*)([\"'])";
+        String imgSrcPattern = "<img[^<>]* src=([\"'])(?<url>[^(\"|')]*)([\"'])";
         return Pattern.compile(imgSrcPattern)
                 .matcher(html)
                 .replaceAll(match -> match.group(0).replace(match.group(2), loadAndGetAsBase64Content(match.group(2))));
@@ -28,7 +29,7 @@ public class ImagesProcessor {
 
     @SneakyThrows
     private String loadAndGetAsBase64Content(String urlOrPath) {
-        Utils.Resource resource = Utils.isAbsoluteUrl(urlOrPath) ? Utils.getResourceByURL(urlOrPath) : Utils.getResourceByPath(urlOrPath);
+        Resource resource = Utils.isAbsoluteUrl(urlOrPath) ? Utils.getResourceByURL(urlOrPath) : Utils.getResourceByPath(urlOrPath);
         String base64Content = Base64.getEncoder().encodeToString(resource.getContent());
         return "data:%s;base64,%s".formatted(Objects.toString(resource.getMimeType(), DEFAULT_IMAGE_MIME_TYPE), base64Content);
     }
