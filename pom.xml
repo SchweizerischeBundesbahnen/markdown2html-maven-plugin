@@ -62,7 +62,7 @@
         <httpclient5.version>5.4.4</httpclient5.version>
         <jackson-databind.version>2.19.0</jackson-databind.version>
         <icu4j.version>77.1</icu4j.version>
-        <jsoup.version>1.19.1</jsoup.version>
+        <jsoup.version>1.20.1</jsoup.version>
 
         <junit-jupiter-api.version>5.12.2</junit-jupiter-api.version>
         <mockito-core.version>5.17.0</mockito-core.version>
