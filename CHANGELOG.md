@@ -1,5 +1,21 @@
 # Changelog
 
+## [1.6.1](https://github.com/SchweizerischeBundesbahnen/markdown2html-maven-plugin/compare/v1.6.0...v1.6.1) (2025-06-26)
+
+
+### Bug Fixes
+
+* **deps:** update dependency com.fasterxml.jackson.core:jackson-databind to v2.18.3 ([7e55788](https://github.com/SchweizerischeBundesbahnen/markdown2html-maven-plugin/commit/7e557880057c427ac08860970ccdc0f5659bceec))
+* **deps:** update dependency com.fasterxml.jackson.core:jackson-databind to v2.19.0 ([275c511](https://github.com/SchweizerischeBundesbahnen/markdown2html-maven-plugin/commit/275c511eb75a649ef9252e12fdbf844814401c4e))
+* **deps:** update dependency com.fasterxml.jackson.core:jackson-databind to v2.19.1 ([5c92e78](https://github.com/SchweizerischeBundesbahnen/markdown2html-maven-plugin/commit/5c92e78db477bc4c0013aa42bf6480bf8283723b))
+* **deps:** update dependency com.ibm.icu:icu4j to v77 ([#59](https://github.com/SchweizerischeBundesbahnen/markdown2html-maven-plugin/issues/59)) ([c2be1f6](https://github.com/SchweizerischeBundesbahnen/markdown2html-maven-plugin/commit/c2be1f60f6d4fa6f29f1f76f5302b60c1c15341a))
+* **deps:** update dependency org.apache.httpcomponents.client5:httpclient5 to v5.4.3 ([#57](https://github.com/SchweizerischeBundesbahnen/markdown2html-maven-plugin/issues/57)) ([6862c1d](https://github.com/SchweizerischeBundesbahnen/markdown2html-maven-plugin/commit/6862c1d782f2e7f2097ca0a325414528e93371de))
+* **deps:** update dependency org.apache.httpcomponents.client5:httpclient5 to v5.4.4 ([1f437aa](https://github.com/SchweizerischeBundesbahnen/markdown2html-maven-plugin/commit/1f437aab02a0014ddbe2d4488952b5ef6d4d7f16))
+* **deps:** update dependency org.apache.httpcomponents.client5:httpclient5 to v5.5 ([4251643](https://github.com/SchweizerischeBundesbahnen/markdown2html-maven-plugin/commit/425164350600321c45cb151a614c7b0728735a62))
+* **deps:** update dependency org.jsoup:jsoup to v1.19.1 ([b1ba111](https://github.com/SchweizerischeBundesbahnen/markdown2html-maven-plugin/commit/b1ba11105834357b1283d62c22854e77ec6e37dd))
+* **deps:** update dependency org.jsoup:jsoup to v1.20.1 ([e87c73c](https://github.com/SchweizerischeBundesbahnen/markdown2html-maven-plugin/commit/e87c73cadb9f2d976b7f5619c4f307367f979b4a))
+* **deps:** update dependency org.jsoup:jsoup to v1.21.1 ([19ad7ad](https://github.com/SchweizerischeBundesbahnen/markdown2html-maven-plugin/commit/19ad7ad07a41064a10397f2ea2043ef59fb60b99))
+
 ## [1.6.0](https://github.com/SchweizerischeBundesbahnen/markdown2html-maven-plugin/compare/v1.5.0...v1.6.0) (2025-01-21)
 
 
