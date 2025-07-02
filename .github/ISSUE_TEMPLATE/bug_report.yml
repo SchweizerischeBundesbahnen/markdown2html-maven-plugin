@@ -36,6 +36,12 @@ body:
       description: Linux or Windows
     validations:
       required: true
+  - type: input
+    attributes:
+      label: Version
+      description: Version of the software where the bug was found.
+    validations:
+      required: true
   - type: textarea
     attributes:
       label: Anything else
