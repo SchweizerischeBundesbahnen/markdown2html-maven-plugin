@@ -21,7 +21,8 @@ class GitHubHttpClientTest {
     @ParameterizedTest
     @MethodSource("convertMarkdownToHtml_validMarkdown_returnsHtml_parameters")
     void convertMarkdownToHtml_validMarkdown_returnsHtml(String inputMarkdown, String expectedHtml) throws Exception {
-        String result = new GitHubHttpClient(null)
+        String githubToken = System.getenv("GITHUB_TOKEN");
+        String result = new GitHubHttpClient(githubToken)
                 .convertMarkdownToHtml(inputMarkdown);
 
         assertEquals(expectedHtml, result);
