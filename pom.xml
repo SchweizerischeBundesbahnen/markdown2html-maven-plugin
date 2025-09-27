@@ -59,7 +59,7 @@
         <maven-surefire-plugin.version>3.5.4</maven-surefire-plugin.version>
         <lombok.version>1.18.34</lombok.version>
 
-        <httpclient5.version>5.5</httpclient5.version>
+        <httpclient5.version>5.5.1</httpclient5.version>
         <jackson-databind.version>2.20.0</jackson-databind.version>
         <icu4j.version>77.1</icu4j.version>
         <jsoup.version>1.21.2</jsoup.version>
