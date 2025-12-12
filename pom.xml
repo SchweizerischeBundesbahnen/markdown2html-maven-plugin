@@ -65,7 +65,7 @@
         <jsoup.version>1.21.2</jsoup.version>
 
         <junit-jupiter-api.version>6.0.1</junit-jupiter-api.version>
-        <mockito-core.version>5.20.0</mockito-core.version>
+        <mockito-core.version>5.21.0</mockito-core.version>
         <annotations.version>24.0.1</annotations.version>
         <slf4j.version>2.0.17</slf4j.version>
 
