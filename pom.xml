@@ -64,7 +64,7 @@
         <icu4j.version>78.3</icu4j.version>
         <jsoup.version>1.22.2</jsoup.version>
 
-        <junit-jupiter-api.version>6.1.1</junit-jupiter-api.version>
+        <junit-jupiter-api.version>6.1.2</junit-jupiter-api.version>
         <mockito-core.version>5.23.0</mockito-core.version>
         <annotations.version>24.0.1</annotations.version>
         <slf4j.version>2.0.18</slf4j.version>
