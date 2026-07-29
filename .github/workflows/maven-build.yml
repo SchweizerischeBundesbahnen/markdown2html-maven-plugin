@@ -45,10 +45,20 @@ jobs:
           else
             IS_RELEASE=false
           fi
+          # The browser cache is keyed on this, not on the whole pom.xml: keyed on the file it would miss on
+          # every change to it and write its 456 MB into the cache again, evicting the other caches
+          PLAYWRIGHT_VERSION=$(mvn help:evaluate -Dexpression=playwright.version -q -DforceStdout)
           {
             echo "version=${VERSION}"
             echo "is_release=${IS_RELEASE}"
+            echo "playwright_version=${PLAYWRIGHT_VERSION}"
           } >> "$GITHUB_OUTPUT"
+      - name: 🔍 Cache the Playwright browser
+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9  # v6.1.0
+        with:
+          path: ~/.cache/ms-playwright
+          key: ${{ runner.os }}-playwright-${{ steps.project_metadata.outputs.playwright_version }}
+          restore-keys: ${{ runner.os }}-playwright-
       - name: 🔍 Cache SonarQube packages
         uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9  # v6.1.0
         with:
@@ -61,9 +71,9 @@ jobs:
           GITHUB_HEAD_REF: ${{ github.head_ref }}
         run: |
           if [ -n "${GITHUB_HEAD_REF}" ]; then
-            mvn --batch-mode -s "${SETTINGS_XML}" clean verify sonar:sonar -Dsonar.branch.name="${GITHUB_HEAD_REF}"
+            mvn --batch-mode -s "${SETTINGS_XML}" -P visual-parity clean verify sonar:sonar -Dsonar.branch.name="${GITHUB_HEAD_REF}"
           else
-            mvn --batch-mode -s "${SETTINGS_XML}" clean verify sonar:sonar
+            mvn --batch-mode -s "${SETTINGS_XML}" -P visual-parity clean verify sonar:sonar
           fi
       - name: 📦 Build with Maven for PRs
         if: github.event_name == 'pull_request'
@@ -71,7 +81,8 @@ jobs:
           GITHUB_HEAD_REF: ${{ github.head_ref }}
           GITHUB_BASE_REF: ${{ github.base_ref }}
           GITHUB_PR_NUMBER_REF: ${{ github.event.pull_request.number }}
-        run: mvn --batch-mode -s "${SETTINGS_XML}" clean verify sonar:sonar -Dsonar.pullrequest.base="${GITHUB_BASE_REF}" -Dsonar.pullrequest.branch="${GITHUB_HEAD_REF}" -Dsonar.pullrequest.key="${GITHUB_PR_NUMBER_REF}"
+        run: mvn --batch-mode -s "${SETTINGS_XML}" -P visual-parity clean verify sonar:sonar -Dsonar.pullrequest.base="${GITHUB_BASE_REF}" -Dsonar.pullrequest.branch="${GITHUB_HEAD_REF}"
+          -Dsonar.pullrequest.key="${GITHUB_PR_NUMBER_REF}"
       - name: 📋 Analyze dependencies
         run: mvn --batch-mode -s "${SETTINGS_XML}" dependency:analyze
         continue-on-error: false
@@ -84,39 +95,6 @@ jobs:
             target/*.jar
           retention-days: 1
           if-no-files-found: error
-  visual-parity:
-    # Renders the fixture locally and through the GitHub API and compares screenshots of the two. Its own
-    # job because Playwright needs a browser of ~130 MB, which the normal build has no business downloading.
-    runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      packages: read
-    env:
-      GITHUB_TOKEN: ${{ github.token }}  # Providing this prevents reaching the GitHub request limits
-    steps:
-      - name: 📄 Checkout the repository
-        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7
-        with:
-          fetch-depth: 1
-          persist-credentials: false
-      - name: 🧱 Set up JDK and Maven
-        uses: actions/setup-java@03ad4de0992f5dab5e18fcb136590ce7c4a0ac95  # v5.6.0
-        with:
-          distribution: ${{ env.JAVA_DISTRIBUTION }}
-          java-version: ${{ env.JAVA_VERSION }}
-          cache: maven
-      - name: 🔍 Cache the Playwright browser
-        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9  # v6.1.0
-        with:
-          path: ~/.cache/ms-playwright
-          key: ${{ runner.os }}-playwright-${{ hashFiles('pom.xml') }}
-          restore-keys: ${{ runner.os }}-playwright-
-      - name: 🌐 Install the Playwright browser
-        run: mvn --batch-mode -s "${SETTINGS_XML}" -P visual-parity test-compile exec:java@install-browser
-      - name: 🖼️ Compare the rendering with GitHub's
-        # On a failure, reproduce it locally to see the screenshots the test writes to target/visual-parity:
-        # mvn -P visual-parity test -Dtest=VisualParityTest -DfailIfNoSpecifiedTests=false
-        run: mvn --batch-mode -s "${SETTINGS_XML}" -P visual-parity test -Dtest=VisualParityTest -DfailIfNoSpecifiedTests=false
   deploy-maven-central:
     needs: build
     if: ${{ needs.build.outputs.is_release == 'true' && github.ref == 'refs/heads/main' }}

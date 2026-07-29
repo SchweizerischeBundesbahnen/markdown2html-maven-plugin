@@ -32,7 +32,31 @@ class GitHubParityTest {
     void render_constructsWithoutGitHubChrome_matchesGitHubByteForByte() {
         String markdown = readFixture("parity/strict.md");
 
-        assertEquals(GitHubMarkdownApi.render(markdown), new MarkdownRenderer().render(markdown));
+        assertEquals(GitHubMarkdownApi.render(markdown, GitHubMarkdownApi.MARKDOWN),
+                new MarkdownRenderer().render(markdown));
+    }
+
+    /**
+     * Alerts are checked against mode {@code gfm}, the only mode that renders them - and the mode this
+     * plugin asked for while it still called the API, which is what makes this the regression test for
+     * having stopped.
+     * <p>
+     * The two put their newlines between block elements in different places, so both sides lose the ones
+     * that sit between tags. Nothing else is touched: the class names, the octicon and the title all have
+     * to match on the byte.
+     */
+    @Test
+    void render_alerts_matchesGitHub() {
+        String markdown = readFixture("parity/alerts.md");
+
+        String expected = GitHubMarkdownApi.render(markdown, GitHubMarkdownApi.GFM);
+        String actual = new MarkdownRenderer().render(markdown);
+
+        assertEquals(betweenTagNewlinesRemoved(expected), betweenTagNewlinesRemoved(actual));
+    }
+
+    private static String betweenTagNewlinesRemoved(String html) {
+        return html.replace(">\n<", "><").strip();
     }
 
     /**
@@ -48,7 +72,7 @@ class GitHubParityTest {
     void render_constructsWithGitHubChrome_matchesGitHubAfterNormalization() {
         String markdown = readFixture("parity/full.md");
 
-        String expected = GitHubHtmlNormalizer.normalize(GitHubMarkdownApi.render(markdown));
+        String expected = GitHubHtmlNormalizer.normalize(GitHubMarkdownApi.render(markdown, GitHubMarkdownApi.MARKDOWN));
         String actual = GitHubHtmlNormalizer.normalize(new MarkdownRenderer().render(markdown));
 
         assertEquals(expected, actual);

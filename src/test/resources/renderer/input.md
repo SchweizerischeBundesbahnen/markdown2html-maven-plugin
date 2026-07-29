@@ -46,3 +46,26 @@ Ampersand & less-than < greater-than > and "double quotes" stay readable.
 Link with a space: [x](<docs/my page.md>)
 
 Non-ASCII: Übersicht, Façade, Настройки, 설정
+
+## GitHub alerts
+
+> [!NOTE]
+> A blockquote whose first line marks it becomes a callout.
+
+> [!WARNING]
+> With more than one paragraph if it has one.
+>
+> Like this.
+
+> [!NOTE]
+
+> [!UNKNOWN]
+> A marker naming no alert leaves the quote alone.
+
+> [!NOTE] and so does one sharing its line with text.
+
+> [!NOTE]**bold right after the marker** also leaves it alone.
+
+> - a quote opening with a list is not an alert either
+
+> **bold opening** means the first thing in the quote is not text

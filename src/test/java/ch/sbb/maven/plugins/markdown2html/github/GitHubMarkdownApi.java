@@ -32,18 +32,24 @@ class GitHubMarkdownApi {
     private static final Timeout TIMEOUT = Timeout.ofSeconds(30);
 
     /**
-     * The mode that renders Markdown the way GitHub renders a file such as {@code README.md}: a single
-     * newline stays a newline. The other mode, {@code gfm}, renders the way issue and pull request
-     * comments are rendered, turning every newline into a {@code <br>}.
+     * Renders Markdown the way GitHub renders a file such as {@code README.md}: a single newline stays a
+     * newline. What it does not render is alerts, which is what {@link #GFM} is for.
      */
-    private static final String MODE = "markdown";
+    static final String MARKDOWN = "markdown";
+
+    /**
+     * Renders the way issue and pull request comments are rendered - every newline becomes a {@code <br>},
+     * which a README must not do. It is the only mode that renders alerts, and the mode this plugin used
+     * while it still called the API.
+     */
+    static final String GFM = "gfm";
 
     /**
      * Renders the given markdown through the GitHub API, or aborts the calling test if the API cannot be
      * reached or refuses to answer - the parity tests are a cross-check against an external service, they
      * must not turn a broken network or an exhausted rate limit into a build failure.
      */
-    String render(String markdown) {
+    String render(String markdown, String mode) {
         try (CloseableHttpClient httpClient = HttpClients.createDefault()) {
             HttpPost httpPost = new HttpPost(URL);
             httpPost.setConfig(RequestConfig.custom()
@@ -59,7 +65,7 @@ class GitHubMarkdownApi {
                 httpPost.setHeader(HttpHeaders.AUTHORIZATION, "Bearer " + token);
             }
 
-            httpPost.setEntity(new StringEntity(requestBody(markdown), ContentType.APPLICATION_JSON));
+            httpPost.setEntity(new StringEntity(requestBody(markdown, mode), ContentType.APPLICATION_JSON));
 
             return httpClient.execute(httpPost, response -> {
                 if (response.getCode() != HttpStatus.SC_OK) {
@@ -73,10 +79,10 @@ class GitHubMarkdownApi {
         }
     }
 
-    private String requestBody(String markdown) throws IOException {
+    private String requestBody(String markdown, String mode) throws IOException {
         ObjectMapper objectMapper = new ObjectMapper();
         ObjectNode request = objectMapper.createObjectNode();
-        request.put("mode", MODE);
+        request.put("mode", mode);
         request.put("text", markdown);
         return objectMapper.writeValueAsString(request);
     }

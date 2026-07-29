@@ -74,7 +74,7 @@ class VisualParityTest {
     @Test
     void render_fixture_looksTheSameAsGitHub() {
         String markdown = readResource(FIXTURE);
-        String githubHtml = GitHubMarkdownApi.render(markdown);
+        String githubHtml = GitHubMarkdownApi.render(markdown, GitHubMarkdownApi.MARKDOWN);
         String localHtml = new MarkdownRenderer().render(markdown);
 
         try (Playwright playwright = createPlaywright()) {
