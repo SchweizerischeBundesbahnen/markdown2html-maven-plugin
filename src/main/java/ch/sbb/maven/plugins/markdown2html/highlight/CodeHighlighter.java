@@ -85,10 +85,17 @@ public class CodeHighlighter {
     );
 
     /**
+     * Colours a code block, or leaves it as it is when nothing can be made of its language.
+     *
      * @param code     the body of the code block, exactly as written
      * @param language the language after the opening fence, if any
      * @return the code as HTML - coloured when the language is one of the known ones, plain otherwise
      */
+    /** Creates a highlighter. It keeps nothing between the blocks it is given. */
+    public CodeHighlighter() {
+        // Nothing to set up
+    }
+
     public @NotNull String highlight(@NotNull String code, @Nullable String language) {
         String syntaxStyle = language == null ? null : LANGUAGES.get(language.toLowerCase(Locale.ROOT));
         if (syntaxStyle == null) {
