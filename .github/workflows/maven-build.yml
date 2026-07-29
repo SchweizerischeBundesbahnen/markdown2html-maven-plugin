@@ -45,15 +45,19 @@ jobs:
           else
             IS_RELEASE=false
           fi
+          # The browser cache is keyed on this, not on the whole pom.xml: keyed on the file it would miss on
+          # every change to it and write its 456 MB into the cache again, evicting the other caches
+          PLAYWRIGHT_VERSION=$(mvn help:evaluate -Dexpression=playwright.version -q -DforceStdout)
           {
             echo "version=${VERSION}"
             echo "is_release=${IS_RELEASE}"
+            echo "playwright_version=${PLAYWRIGHT_VERSION}"
           } >> "$GITHUB_OUTPUT"
       - name: 🔍 Cache the Playwright browser
         uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9  # v6.1.0
         with:
           path: ~/.cache/ms-playwright
-          key: ${{ runner.os }}-playwright-${{ hashFiles('pom.xml') }}
+          key: ${{ runner.os }}-playwright-${{ steps.project_metadata.outputs.playwright_version }}
           restore-keys: ${{ runner.os }}-playwright-
       - name: 🔍 Cache SonarQube packages
         uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9  # v6.1.0
