@@ -38,10 +38,18 @@ public class MarkdownRenderer {
     private final HtmlRenderer renderer;
 
     public MarkdownRenderer() {
+        this(true);
+    }
+
+    /**
+     * @param highlightCode whether fenced code blocks with a known language get their syntax coloured in
+     */
+    public MarkdownRenderer(boolean highlightCode) {
         parser = Parser.builder()
                 .extensions(EXTENSIONS)
                 .build();
-        renderer = HtmlRenderer.builder()
+
+        HtmlRenderer.Builder builder = HtmlRenderer.builder()
                 .extensions(EXTENSIONS)
                 // A single newline stays a newline instead of becoming a <br>: this is how GitHub renders
                 // Markdown files such as README.md. (Its /markdown API in "gfm" mode renders with hard
@@ -51,8 +59,13 @@ public class MarkdownRenderer {
                 .escapeHtml(false)
                 // GitHub percent-encodes link and image destinations, so that spaces and other unsafe
                 // characters in relative paths end up as valid URLs.
-                .percentEncodeUrls(true)
-                .build();
+                .percentEncodeUrls(true);
+
+        if (highlightCode) {
+            builder.nodeRendererFactory(HighlightedCodeBlockRenderer::new);
+        }
+
+        renderer = builder.build();
     }
 
     public @NotNull String render(@NotNull String markdown) {

@@ -45,6 +45,13 @@ public class MarkdownToHtmlMojo extends AbstractMojo {
     @Parameter(property = "generateHeadingIds", defaultValue = "false")
     private boolean generateHeadingIds;
 
+    /**
+     * Colours the syntax of fenced code blocks that name a known language, inline, so that the generated
+     * file stays readable without a stylesheet of its own.
+     */
+    @Parameter(property = "highlightCode", defaultValue = "true")
+    private boolean highlightCode;
+
     @Parameter(property = "excludeChapters")
     private List<String> excludeChapters;
 
@@ -86,7 +93,7 @@ public class MarkdownToHtmlMojo extends AbstractMojo {
                 }
             }
 
-            String html = new MarkdownRenderer().render(filteredMarkdown);
+            String html = new MarkdownRenderer(highlightCode).render(filteredMarkdown);
 
             if (ImageProcessingType.EMBED.equals(imageProcessingType)) {
                 log.info("Embedding images");
