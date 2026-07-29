@@ -117,6 +117,10 @@ jobs:
         # On a failure, reproduce it locally to see the screenshots the test writes to target/visual-parity:
         # mvn -P visual-parity test -Dtest=VisualParityTest -DfailIfNoSpecifiedTests=false
         run: mvn --batch-mode -s "${SETTINGS_XML}" -P visual-parity test -Dtest=VisualParityTest -DfailIfNoSpecifiedTests=false
+      - name: 🧾 Compare the rendering with the recorded baselines
+        # In the Playwright container, which is where the baselines were recorded: text rasterises
+        # differently everywhere else, the runner included
+        run: ./src/visual-test/record-baselines.sh --check
   deploy-maven-central:
     needs: build
     if: ${{ needs.build.outputs.is_release == 'true' && github.ref == 'refs/heads/main' }}

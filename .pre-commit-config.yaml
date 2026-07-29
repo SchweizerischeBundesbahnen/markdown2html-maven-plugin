@@ -15,7 +15,7 @@ repos:
       - id: trailing-whitespace
         # The renderer fixtures encode hard line breaks as two trailing spaces, and the baselines are
         # verbatim recordings of what each renderer produced - editing either defeats their purpose
-        exclude: ^src/test/resources/(parity|renderer|baseline)/.+$
+        exclude: ^src/(test/resources/(parity|renderer|baseline)|visual-test/resources/(visual|baseline))/.+$
       - id: check-xml
       - id: check-json
       - id: check-yaml

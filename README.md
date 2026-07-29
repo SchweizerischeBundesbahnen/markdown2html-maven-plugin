@@ -71,9 +71,10 @@ they stop agreeing, so both sides are also recorded:
 - `src/test/resources/baseline/{github,local}-*.html` — the markup each side produces. A failing `github`
   case means GitHub changed, a failing `local` case means this plugin did, and `git diff` says what.
   Re-record with `mvn test -Dbaseline.update=true`.
-- `src/visual-test/resources/baseline/baseline.png` — how the output looks, syntax colours and alerts
-  included, which is the part the live comparison has to switch off. Text rasterises differently on every
-  platform, so this one is recorded and checked inside the Playwright container:
+- `src/visual-test/resources/baseline/{text,code,blocks}.png` — how the output looks, syntax colours and
+  alerts included, which is the part the live comparison has to switch off. One picture per area, so a
+  failure names where to look. Text rasterises differently on every platform, so these are recorded and
+  checked inside the Playwright container:
 
 ```bash
 ./src/visual-test/record-baselines.sh --check   # compare

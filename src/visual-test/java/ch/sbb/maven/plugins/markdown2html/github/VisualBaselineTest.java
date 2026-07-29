@@ -7,7 +7,8 @@ import com.microsoft.playwright.BrowserType;
 import com.microsoft.playwright.Page;
 import com.microsoft.playwright.Playwright;
 import lombok.SneakyThrows;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
@@ -32,12 +33,14 @@ import static org.junit.jupiter.api.Assumptions.abort;
  * <pre>
  * ./src/visual-test/record-baselines.sh
  * </pre>
+ * <p>
+ * One picture per area - text, code, blocks - so that a failure names where to look, and so that no
+ * recording grows past the size the large-file hook allows.
  */
 class VisualBaselineTest {
 
-    private static final String FIXTURE = "visual/baseline.md";
-    private static final Path BASELINE = Path.of("src", "visual-test", "resources", "baseline", "baseline.png");
-    private static final Path FAILURE = Path.of("target", "visual-baseline");
+    private static final Path BASELINES = Path.of("src", "visual-test", "resources", "baseline");
+    private static final Path FAILURES = Path.of("target", "visual-baseline");
 
     private static final int VIEWPORT_WIDTH = 1000;
     private static final int VIEWPORT_HEIGHT = 800;
@@ -48,30 +51,32 @@ class VisualBaselineTest {
      */
     private static final double ALLOWED_DIFFERING_RATIO = 0.0;
 
-    @Test
+    @ParameterizedTest
+    @ValueSource(strings = {"text", "code", "blocks"})
     @SneakyThrows
-    void render_fixture_stillLooksLikeTheRecordedBaseline() {
+    void render_fixture_stillLooksLikeTheRecordedBaseline(String fixture) {
         if (!"1".equals(System.getenv("VISUAL_BASELINE_CONTAINER"))) {
             abort("The image baselines only hold in the pinned Playwright container - "
                     + "run ./src/visual-test/record-baselines.sh, or --check to compare against them");
         }
 
-        byte[] screenshot = screenshot(new MarkdownRenderer().render(readResource(FIXTURE)));
+        byte[] screenshot = screenshot(new MarkdownRenderer().render(readResource("visual/baseline-" + fixture + ".md")));
+        Path baseline = BASELINES.resolve(fixture + ".png");
 
         if (Boolean.getBoolean("visual.baseline.update")) {
-            Files.createDirectories(BASELINE.getParent());
-            Files.write(BASELINE, screenshot);
+            Files.createDirectories(BASELINES);
+            Files.write(baseline, screenshot);
             return;
         }
 
-        ScreenshotComparison comparison = ScreenshotComparison.of(Files.readAllBytes(BASELINE), screenshot);
+        ScreenshotComparison comparison = ScreenshotComparison.of(Files.readAllBytes(baseline), screenshot);
         if (comparison.getDifferingRatio() > ALLOWED_DIFFERING_RATIO) {
-            comparison.writeTo(FAILURE);
+            comparison.writeTo(FAILURES.resolve(fixture));
         }
 
         assertTrue(comparison.getDifferingRatio() <= ALLOWED_DIFFERING_RATIO,
-                () -> "The rendering no longer looks like the baseline: %s. See %s, and record it again if the change was meant."
-                        .formatted(comparison.describe(), FAILURE.toAbsolutePath()));
+                () -> "The %s rendering no longer looks like its baseline: %s. See %s, and record it again if the change was meant."
+                        .formatted(fixture, comparison.describe(), FAILURES.resolve(fixture).toAbsolutePath()));
     }
 
     private byte[] screenshot(String html) {
