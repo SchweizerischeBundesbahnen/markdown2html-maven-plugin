@@ -1,11 +1,14 @@
 package ch.sbb.maven.plugins.markdown2html.markdown;
 
-import ch.sbb.maven.plugins.markdown2html.TestCommons;
+import lombok.SneakyThrows;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
+import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
+import java.util.Objects;
 import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -36,7 +39,31 @@ class MarkdownRendererTest {
 
     @Test
     void render_fixtureCoveringGfmConstructs_returnsExpectedHtml() {
-        TestCommons.runFunctionTestUsingFiles("renderer/input.md", "renderer/expected.html",
-                markdown -> new MarkdownRenderer().render(markdown));
+        assertEquals(readResource("renderer/expected.html"),
+                new MarkdownRenderer().render(readResource("renderer/input.md")));
+    }
+
+    @Test
+    void render_highlightingOff_leavesTheCodeUncoloured() {
+        String markdown = "```java\nint x;\n```";
+
+        assertEquals("<pre><code class=\"language-java\">int x;\n</code></pre>\n",
+                new MarkdownRenderer(false).render(markdown));
+    }
+
+    @Test
+    void render_highlightingOn_coloursTheCode() {
+        String markdown = "```java\nint x;\n```";
+
+        assertEquals("<pre><code class=\"language-java\"><span style=\"color:#cf222e\">int</span> x;\n</code></pre>\n",
+                new MarkdownRenderer(true).render(markdown));
+    }
+
+    @SneakyThrows
+    private String readResource(String path) {
+        try (InputStream resource = Objects.requireNonNull(
+                getClass().getClassLoader().getResourceAsStream(path), "Missing resource: " + path)) {
+            return new String(resource.readAllBytes(), StandardCharsets.UTF_8);
+        }
     }
 }

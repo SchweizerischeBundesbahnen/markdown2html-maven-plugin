@@ -37,6 +37,9 @@ public class MarkdownToHtmlMojo extends AbstractMojo {
      * pom still passing it.
      */
     @Deprecated(forRemoval = true)
+    // S1133 asks not to forget removing deprecated code: this one goes with the next major release, once
+    // no pom in the wild still configures it
+    @SuppressWarnings("java:S1133")
     @Parameter(property = "tokenEnvVarName")
     private String tokenEnvVarName;
 
@@ -79,6 +82,10 @@ public class MarkdownToHtmlMojo extends AbstractMojo {
     @Parameter(property = "embedStylesheet", defaultValue = "false")
     private boolean embedStylesheet;
 
+    // S5738 objects to reading a field marked for removal, which is exactly what has to happen here: the
+    // parameter is only still there so that a pom configuring it keeps working, and telling its author so
+    // means reading it
+    @SuppressWarnings("java:S5738")
     public void execute() throws MojoExecutionException {
         try {
             log.info("Processing markdown file: {}", inputFile);

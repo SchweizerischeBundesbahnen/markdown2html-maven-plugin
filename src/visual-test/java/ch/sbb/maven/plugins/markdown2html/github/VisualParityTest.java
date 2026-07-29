@@ -111,6 +111,7 @@ class VisualParityTest {
         return page.screenshot(new Page.ScreenshotOptions().setFullPage(true));
     }
 
+    @SneakyThrows
     private String buildPage(String html) {
         return readResource("visual/shell.html")
                 .replace("{{content}}", new StylesheetEmbedder().embed(html))

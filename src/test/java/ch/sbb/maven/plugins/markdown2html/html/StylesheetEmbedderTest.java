@@ -1,5 +1,6 @@
 package ch.sbb.maven.plugins.markdown2html.html;
 
+import lombok.SneakyThrows;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -8,6 +9,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 class StylesheetEmbedderTest {
 
     @Test
+    @SneakyThrows
     void embed_html_wrapsItInTheStylesheet() {
         String result = new StylesheetEmbedder().embed("<h1>Title</h1>\n");
 
@@ -21,6 +23,7 @@ class StylesheetEmbedderTest {
      * file is embedded in, and nothing may be fetched over the network at display time.
      */
     @Test
+    @SneakyThrows
     void embed_stylesheet_isScopedAndSelfContained() {
         String stylesheet = new StylesheetEmbedder().embed("").split("</style>")[0];
 

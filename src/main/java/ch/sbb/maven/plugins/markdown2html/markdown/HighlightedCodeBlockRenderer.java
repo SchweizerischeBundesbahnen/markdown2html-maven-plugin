@@ -58,7 +58,7 @@ class HighlightedCodeBlockRenderer implements NodeRenderer {
      * The info string may carry more than the language - GitHub reads attributes after it - so only the
      * first word counts, which is also how commonmark-java derives the {@code language-} class.
      */
-    private static @Nullable String languageOf(@Nullable String info) {
+    static @Nullable String languageOf(@Nullable String info) {
         if (info == null || info.isEmpty()) {
             return null;
         }
