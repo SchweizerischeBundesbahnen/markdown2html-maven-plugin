@@ -1,12 +1,12 @@
 package ch.sbb.maven.plugins.markdown2html;
 
-import ch.sbb.maven.plugins.markdown2html.github.GitHubHttpClient;
 import ch.sbb.maven.plugins.markdown2html.html.HtmlProcessor;
 import ch.sbb.maven.plugins.markdown2html.images.ImageProcessingType;
 import ch.sbb.maven.plugins.markdown2html.images.ImagesProcessor;
 import ch.sbb.maven.plugins.markdown2html.links.ExternalLinkProcessor;
 import ch.sbb.maven.plugins.markdown2html.links.RelativeLinksProcessor;
 import ch.sbb.maven.plugins.markdown2html.markdown.MarkdownProcessor;
+import ch.sbb.maven.plugins.markdown2html.markdown.MarkdownRenderer;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
@@ -30,7 +30,13 @@ public class MarkdownToHtmlMojo extends AbstractMojo {
     @Parameter(property = "outputFile", defaultValue = "${project.basedir}/README.html")
     private File outputFile;
 
-    @Parameter(property = "tokenEnvVarName", defaultValue = "GITHUB_TOKEN")
+    /**
+     * @deprecated Markdown is rendered locally, so no GitHub token is needed anymore. The parameter is
+     * kept because Maven fails on configuration it cannot map to a mojo field, which would break every
+     * pom still passing it.
+     */
+    @Deprecated(forRemoval = true)
+    @Parameter(property = "tokenEnvVarName")
     private String tokenEnvVarName;
 
     @Parameter(property = "failOnError", defaultValue = "true")
@@ -61,8 +67,9 @@ public class MarkdownToHtmlMojo extends AbstractMojo {
         try {
             log.info("Processing markdown file: {}", inputFile);
 
-            String githubToken = System.getenv(tokenEnvVarName);
-            GitHubHttpClient gitHubHttpClient = new GitHubHttpClient(githubToken);
+            if (tokenEnvVarName != null) {
+                log.warn("Parameter 'tokenEnvVarName' is deprecated and ignored: markdown is rendered locally, the GitHub API is no longer called");
+            }
 
             String markdown = Files.readString(inputFile.toPath(), StandardCharsets.UTF_8);
 
@@ -79,7 +86,7 @@ public class MarkdownToHtmlMojo extends AbstractMojo {
                 }
             }
 
-            String html = gitHubHttpClient.convertMarkdownToHtml(filteredMarkdown);
+            String html = new MarkdownRenderer().render(filteredMarkdown);
 
             if (ImageProcessingType.EMBED.equals(imageProcessingType)) {
                 log.info("Embedding images");

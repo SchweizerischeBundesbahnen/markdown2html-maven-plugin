@@ -1,0 +1,50 @@
+<h1>Renderer fixture</h1>
+<p>Pins the rendering offline, so the guarantee does not depend on api.github.com being reachable.
+The cross-check against GitHub itself is GitHubParityTest.</p>
+<p>A soft
+break must stay a newline - GitHub renders Markdown files that way, and the two trailing spaces below
+are the only thing that makes a hard break<br>
+like this one.</p>
+<h2>GFM extensions</h2>
+<table>
+<thead>
+<tr>
+<th>Version</th>
+<th>Changes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>v1.0.0</td>
+<td>Initial release</td>
+</tr>
+</tbody>
+</table>
+<p><del>Strikethrough</del> text.</p>
+<ul>
+<li><input type="checkbox" disabled> open task</li>
+<li><input type="checkbox" disabled checked> finished task</li>
+</ul>
+<p>Autolinked <a href="https://example.com/auto">https://example.com/auto</a> and <a href="https://example.org">https://example.org</a> and <a href="mailto:foo@bar.com">foo@bar.com</a>.</p>
+<p>Footnote reference<sup class="footnote-ref"><a href="#fn-1" id="fnref-1" data-footnote-ref>1</a></sup></p>
+<h2>Escaping and raw HTML</h2>
+<pre><code class="language-java">public class Test {
+    public static void main(String[] args) {
+        System.out.println("Hello, &lt;World&gt; &amp; 'you'!");
+    }
+}
+</code></pre>
+<p>Ampersand &amp; less-than &lt; greater-than &gt; and "double quotes" stay readable.</p>
+<div align="center">
+  <img src="doc/img.png" alt="pic" width="100">
+</div>
+
+<p>Link with a space: <a href="docs/my%20page.md">x</a></p>
+<p>Non-ASCII: Übersicht, Façade, Настройки, 설정</p>
+<section class="footnotes" data-footnotes>
+<ol>
+<li id="fn-1">
+<p>The footnote text. <a href="#fnref-1" class="footnote-backref" data-footnote-backref data-footnote-backref-idx="1" aria-label="Back to reference 1">↩</a></p>
+</li>
+</ol>
+</section>
