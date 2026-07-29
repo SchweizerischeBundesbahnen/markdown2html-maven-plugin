@@ -76,7 +76,7 @@
         <exec-maven-plugin.version>3.6.3</exec-maven-plugin.version>
 
         <maven-gpg-plugin.version>3.2.8</maven-gpg-plugin.version>
-        <sonar-maven-plugin.version>4.0.1.6619</sonar-maven-plugin.version>
+        <sonar-maven-plugin.version>5.7.0.6970</sonar-maven-plugin.version>
 
         <!-- Sonar and JaCoCo -->
         <jacoco.version>0.8.15</jacoco.version>
