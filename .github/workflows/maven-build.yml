@@ -84,6 +84,45 @@ jobs:
             target/*.jar
           retention-days: 1
           if-no-files-found: error
+  visual-parity:
+    # Renders the fixture locally and through the GitHub API and compares screenshots of the two. Its own
+    # job because Playwright needs a browser of ~130 MB, which the normal build has no business downloading.
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: read
+    env:
+      GITHUB_TOKEN: ${{ github.token }}  # Providing this prevents reaching the GitHub request limits
+    steps:
+      - name: 📄 Checkout the repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7
+        with:
+          fetch-depth: 1
+          persist-credentials: false
+      - name: 🧱 Set up JDK and Maven
+        uses: actions/setup-java@03ad4de0992f5dab5e18fcb136590ce7c4a0ac95  # v5.6.0
+        with:
+          distribution: ${{ env.JAVA_DISTRIBUTION }}
+          java-version: ${{ env.JAVA_VERSION }}
+          cache: maven
+      - name: 🔍 Cache the Playwright browser
+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9  # v6.1.0
+        with:
+          path: ~/.cache/ms-playwright
+          key: ${{ runner.os }}-playwright-${{ hashFiles('pom.xml') }}
+          restore-keys: ${{ runner.os }}-playwright-
+      - name: 🌐 Install the Playwright browser
+        run: mvn --batch-mode -s "${SETTINGS_XML}" -P visual-parity test-compile exec:java@install-browser
+      - name: 🖼️ Compare the rendering with GitHub's
+        run: mvn --batch-mode -s "${SETTINGS_XML}" -P visual-parity test -Dtest=VisualParityTest -DfailIfNoSpecifiedTests=false
+      - name: 📦 Upload the screenshots
+        if: ${{ always() }}
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a  # v7.0.1
+        with:
+          name: visual-parity-screenshots
+          path: target/visual-parity/
+          retention-days: 7
+          if-no-files-found: ignore
   deploy-maven-central:
     needs: build
     if: ${{ needs.build.outputs.is_release == 'true' && github.ref == 'refs/heads/main' }}

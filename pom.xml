@@ -71,6 +71,10 @@
         <annotations.version>24.0.1</annotations.version>
         <slf4j.version>2.0.18</slf4j.version>
 
+        <playwright.version>1.61.0</playwright.version>
+        <build-helper-maven-plugin.version>3.6.1</build-helper-maven-plugin.version>
+        <exec-maven-plugin.version>3.6.3</exec-maven-plugin.version>
+
         <maven-gpg-plugin.version>3.2.8</maven-gpg-plugin.version>
         <sonar-maven-plugin.version>4.0.0.4121</sonar-maven-plugin.version>
 
@@ -261,6 +265,72 @@
     </build>
 
     <profiles>
+        <!--
+            The visual parity test renders both HTMLs in a browser and compares the screenshots. Playwright
+            downloads a browser of ~130 MB the first time it runs, so neither the test nor its dependency is
+            part of the normal build: it lives in its own source root, compiled only by this profile.
+        -->
+        <profile>
+            <id>visual-parity</id>
+            <dependencies>
+                <dependency>
+                    <groupId>com.microsoft.playwright</groupId>
+                    <artifactId>playwright</artifactId>
+                    <version>${playwright.version}</version>
+                    <scope>test</scope>
+                </dependency>
+            </dependencies>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.codehaus.mojo</groupId>
+                        <artifactId>build-helper-maven-plugin</artifactId>
+                        <version>${build-helper-maven-plugin.version}</version>
+                        <executions>
+                            <execution>
+                                <id>add-visual-test-sources</id>
+                                <phase>generate-test-sources</phase>
+                                <goals>
+                                    <goal>add-test-source</goal>
+                                    <goal>add-test-resource</goal>
+                                </goals>
+                                <configuration>
+                                    <sources>
+                                        <source>src/visual-test/java</source>
+                                    </sources>
+                                    <resources>
+                                        <resource>
+                                            <directory>src/visual-test/resources</directory>
+                                        </resource>
+                                    </resources>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <!-- Installs the browser: mvn -P visual-parity test-compile exec:java@install-browser -->
+                    <plugin>
+                        <groupId>org.codehaus.mojo</groupId>
+                        <artifactId>exec-maven-plugin</artifactId>
+                        <version>${exec-maven-plugin.version}</version>
+                        <executions>
+                            <execution>
+                                <id>install-browser</id>
+                                <configuration>
+                                    <mainClass>com.microsoft.playwright.CLI</mainClass>
+                                    <classpathScope>test</classpathScope>
+                                    <arguments>
+                                        <argument>install</argument>
+                                        <argument>--with-deps</argument>
+                                        <argument>chromium</argument>
+                                    </arguments>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+
         <profile>
             <id>gpg-sign</id>
             <build>

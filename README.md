@@ -52,6 +52,14 @@ external links get no `rel="nofollow"`, and `:emoji:` shortcodes are left as wri
 
 `GitHubParityTest` verifies the rest against the live GitHub API on every build: byte for byte on the
 constructs GitHub leaves undecorated, and after stripping the chrome listed above on the ones it decorates.
+`VisualParityTest` answers the other question - whether the two *look* the same - by rendering both in a
+browser and comparing screenshots. It needs a browser, so it runs in its own CI job, behind the
+`visual-parity` profile:
+
+```bash
+mvn -P visual-parity test-compile exec:java@install-browser   # once, downloads a browser
+mvn -P visual-parity test -Dtest=VisualParityTest -DfailIfNoSpecifiedTests=false
+```
 
 ## Build
 
