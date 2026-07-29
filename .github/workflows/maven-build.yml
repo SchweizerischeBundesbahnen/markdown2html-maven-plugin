@@ -114,17 +114,9 @@ jobs:
       - name: 🌐 Install the Playwright browser
         run: mvn --batch-mode -s "${SETTINGS_XML}" -P visual-parity test-compile exec:java@install-browser
       - name: 🖼️ Compare the rendering with GitHub's
+        # On a failure, reproduce it locally to see the screenshots the test writes to target/visual-parity:
+        # mvn -P visual-parity test -Dtest=VisualParityTest -DfailIfNoSpecifiedTests=false
         run: mvn --batch-mode -s "${SETTINGS_XML}" -P visual-parity test -Dtest=VisualParityTest -DfailIfNoSpecifiedTests=false
-      - name: 📦 Upload the screenshots
-        # Only on a failure: the message says how many pixels differ, these say where
-        if: ${{ failure() }}
-        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a  # v7.0.1
-        with:
-          name: visual-parity-screenshots
-          path: target/visual-parity/
-          retention-days: 7
-          # The job can also fail before the browser has rendered anything
-          if-no-files-found: ignore
   deploy-maven-central:
     needs: build
     if: ${{ needs.build.outputs.is_release == 'true' && github.ref == 'refs/heads/main' }}
