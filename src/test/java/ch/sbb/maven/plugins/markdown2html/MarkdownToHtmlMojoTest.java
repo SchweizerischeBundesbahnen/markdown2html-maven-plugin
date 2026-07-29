@@ -112,7 +112,9 @@ class MarkdownToHtmlMojoTest {
         set("relativeLinkPrefix", "https://localhost:9090/");
         set("imageProcessingType", ImageProcessingType.EMBED);
 
-        String html = convert("[doc](docs/page.md) ![pic](%s)\n".formatted(image.toAbsolutePath()));
+        // Concatenated rather than formatted: the newline ends a line of Markdown, it is not a line
+        // separator for the platform to choose
+        String html = convert("[doc](docs/page.md) ![pic](" + image.toAbsolutePath() + ")\n");
 
         assertTrue(html.contains("href=\"https://localhost:9090/docs/page.md\""), html);
         assertTrue(html.contains("src=\"data:"), html);
