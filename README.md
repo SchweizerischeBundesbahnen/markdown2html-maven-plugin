@@ -34,6 +34,14 @@ Known languages: `bash`/`sh`/`shell`/`zsh`/`console`, `bat`/`cmd`, `c`, `cpp`, `
 `proto`/`protobuf`, `python`/`py`, `ruby`/`rb`, `rust`/`rs`, `scala`, `sql`, `typescript`/`ts`, `xml`,
 `yaml`/`yml`. Anything else is rendered plain, with its `language-…` class kept.
 
+### GitHub typography
+
+Highlighting colours the code; it does not style the document. Set `embedStylesheet` to `true` and the
+output is wrapped in `<style>…</style><div class="markdown-body">`, carrying
+[github-markdown-css](https://github.com/sindresorhus/github-markdown-css) (MIT, vendored into the plugin,
+nothing fetched at build or display time). Every rule in it is scoped to `markdown-body`, so it styles the
+generated content and nothing else on the page.
+
 ### Differences from github.com
 
 The output is the same markup, without the chrome github.com wraps around it: headings carry no permalink
