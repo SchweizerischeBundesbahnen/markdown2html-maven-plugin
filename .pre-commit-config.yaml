@@ -13,6 +13,8 @@ repos:
       - id: check-case-conflict
       - id: check-merge-conflict
       - id: trailing-whitespace
+        # The renderer fixtures encode hard line breaks as two trailing spaces
+        exclude: ^src/test/resources/(parity|renderer)/.+\.md$
       - id: check-xml
       - id: check-json
       - id: check-yaml

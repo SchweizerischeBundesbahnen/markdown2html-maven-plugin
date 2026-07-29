@@ -7,7 +7,7 @@
     <packaging>maven-plugin</packaging>
 
     <name>Markdown to HTML Maven Plugin</name>
-    <description>This Maven plugin uses GitHub API for converting Markdown to HTML.</description>
+    <description>This Maven plugin converts Markdown to HTML locally, using a GitHub Flavored Markdown renderer.</description>
     <url>https://github.com/SchweizerischeBundesbahnen/markdown2html-maven-plugin</url>
 
     <licenses>
@@ -60,6 +60,8 @@
         <lombok.version>1.18.34</lombok.version>
 
         <httpclient5.version>5.6.2</httpclient5.version>
+        <commonmark.version>0.29.0</commonmark.version>
+        <rsyntaxtextarea.version>4.0.1</rsyntaxtextarea.version>
         <jackson-databind.version>2.22.1</jackson-databind.version>
         <icu4j.version>78.3</icu4j.version>
         <jsoup.version>1.22.2</jsoup.version>
@@ -68,6 +70,10 @@
         <mockito-core.version>5.23.0</mockito-core.version>
         <annotations.version>24.0.1</annotations.version>
         <slf4j.version>2.0.18</slf4j.version>
+
+        <playwright.version>1.61.0</playwright.version>
+        <build-helper-maven-plugin.version>3.6.1</build-helper-maven-plugin.version>
+        <exec-maven-plugin.version>3.6.3</exec-maven-plugin.version>
 
         <maven-gpg-plugin.version>3.2.8</maven-gpg-plugin.version>
         <sonar-maven-plugin.version>5.7.0.6970</sonar-maven-plugin.version>
@@ -127,9 +133,40 @@
             <version>${httpclient5.version}</version>
         </dependency>
         <dependency>
-            <groupId>com.fasterxml.jackson.core</groupId>
-            <artifactId>jackson-databind</artifactId>
-            <version>${jackson-databind.version}</version>
+            <groupId>org.commonmark</groupId>
+            <artifactId>commonmark</artifactId>
+            <version>${commonmark.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.commonmark</groupId>
+            <artifactId>commonmark-ext-gfm-tables</artifactId>
+            <version>${commonmark.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.commonmark</groupId>
+            <artifactId>commonmark-ext-gfm-strikethrough</artifactId>
+            <version>${commonmark.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.commonmark</groupId>
+            <artifactId>commonmark-ext-task-list-items</artifactId>
+            <version>${commonmark.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.commonmark</groupId>
+            <artifactId>commonmark-ext-autolink</artifactId>
+            <version>${commonmark.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.commonmark</groupId>
+            <artifactId>commonmark-ext-footnotes</artifactId>
+            <version>${commonmark.version}</version>
+        </dependency>
+        <!-- Only its lexers are used, to tokenize fenced code blocks; no Swing component is created -->
+        <dependency>
+            <groupId>com.fifesoft</groupId>
+            <artifactId>rsyntaxtextarea</artifactId>
+            <version>${rsyntaxtextarea.version}</version>
         </dependency>
         <dependency>
             <groupId>com.ibm.icu</groupId>
@@ -164,6 +201,13 @@
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-simple</artifactId>
             <version>${slf4j.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <!-- Only the GitHub parity tests need it, to build the request body for the markdown API -->
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+            <version>${jackson-databind.version}</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
@@ -221,6 +265,72 @@
     </build>
 
     <profiles>
+        <!--
+            The visual parity test renders both HTMLs in a browser and compares the screenshots. Playwright
+            downloads a browser of ~130 MB the first time it runs, so neither the test nor its dependency is
+            part of the normal build: it lives in its own source root, compiled only by this profile.
+        -->
+        <profile>
+            <id>visual-parity</id>
+            <dependencies>
+                <dependency>
+                    <groupId>com.microsoft.playwright</groupId>
+                    <artifactId>playwright</artifactId>
+                    <version>${playwright.version}</version>
+                    <scope>test</scope>
+                </dependency>
+            </dependencies>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.codehaus.mojo</groupId>
+                        <artifactId>build-helper-maven-plugin</artifactId>
+                        <version>${build-helper-maven-plugin.version}</version>
+                        <executions>
+                            <execution>
+                                <id>add-visual-test-sources</id>
+                                <phase>generate-test-sources</phase>
+                                <goals>
+                                    <goal>add-test-source</goal>
+                                    <goal>add-test-resource</goal>
+                                </goals>
+                                <configuration>
+                                    <sources>
+                                        <source>src/visual-test/java</source>
+                                    </sources>
+                                    <resources>
+                                        <resource>
+                                            <directory>src/visual-test/resources</directory>
+                                        </resource>
+                                    </resources>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <!-- Installs the browser: mvn -P visual-parity test-compile exec:java@install-browser -->
+                    <plugin>
+                        <groupId>org.codehaus.mojo</groupId>
+                        <artifactId>exec-maven-plugin</artifactId>
+                        <version>${exec-maven-plugin.version}</version>
+                        <executions>
+                            <execution>
+                                <id>install-browser</id>
+                                <configuration>
+                                    <mainClass>com.microsoft.playwright.CLI</mainClass>
+                                    <classpathScope>test</classpathScope>
+                                    <arguments>
+                                        <argument>install</argument>
+                                        <argument>--with-deps</argument>
+                                        <argument>chromium</argument>
+                                    </arguments>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+
         <profile>
             <id>gpg-sign</id>
             <build>

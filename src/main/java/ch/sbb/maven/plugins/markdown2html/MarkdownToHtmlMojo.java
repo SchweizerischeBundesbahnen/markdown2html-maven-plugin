@@ -1,12 +1,13 @@
 package ch.sbb.maven.plugins.markdown2html;
 
-import ch.sbb.maven.plugins.markdown2html.github.GitHubHttpClient;
 import ch.sbb.maven.plugins.markdown2html.html.HtmlProcessor;
+import ch.sbb.maven.plugins.markdown2html.html.StylesheetEmbedder;
 import ch.sbb.maven.plugins.markdown2html.images.ImageProcessingType;
 import ch.sbb.maven.plugins.markdown2html.images.ImagesProcessor;
 import ch.sbb.maven.plugins.markdown2html.links.ExternalLinkProcessor;
 import ch.sbb.maven.plugins.markdown2html.links.RelativeLinksProcessor;
 import ch.sbb.maven.plugins.markdown2html.markdown.MarkdownProcessor;
+import ch.sbb.maven.plugins.markdown2html.markdown.MarkdownRenderer;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
@@ -30,7 +31,16 @@ public class MarkdownToHtmlMojo extends AbstractMojo {
     @Parameter(property = "outputFile", defaultValue = "${project.basedir}/README.html")
     private File outputFile;
 
-    @Parameter(property = "tokenEnvVarName", defaultValue = "GITHUB_TOKEN")
+    /**
+     * @deprecated Markdown is rendered locally, so no GitHub token is needed anymore. The parameter is
+     * kept because Maven fails on configuration it cannot map to a mojo field, which would break every
+     * pom still passing it.
+     */
+    @Deprecated(forRemoval = true)
+    // S1133 asks not to forget removing deprecated code: this one goes with the next major release, once
+    // no pom in the wild still configures it
+    @SuppressWarnings("java:S1133")
+    @Parameter(property = "tokenEnvVarName")
     private String tokenEnvVarName;
 
     @Parameter(property = "failOnError", defaultValue = "true")
@@ -38,6 +48,13 @@ public class MarkdownToHtmlMojo extends AbstractMojo {
 
     @Parameter(property = "generateHeadingIds", defaultValue = "false")
     private boolean generateHeadingIds;
+
+    /**
+     * Colours the syntax of fenced code blocks that name a known language, inline, so that the generated
+     * file stays readable without a stylesheet of its own.
+     */
+    @Parameter(property = "highlightCode", defaultValue = "true")
+    private boolean highlightCode;
 
     @Parameter(property = "excludeChapters")
     private List<String> excludeChapters;
@@ -57,12 +74,25 @@ public class MarkdownToHtmlMojo extends AbstractMojo {
     @Parameter(property = "imageProcessingType", defaultValue = "NONE")
     private ImageProcessingType imageProcessingType;
 
+    /**
+     * Wraps the output in GitHub's markdown stylesheet, so that a page embedding it gets GitHub's typography
+     * without providing styles of its own. Every rule is scoped to the {@code markdown-body} class the
+     * content is wrapped in.
+     */
+    @Parameter(property = "embedStylesheet", defaultValue = "false")
+    private boolean embedStylesheet;
+
+    // S5738 objects to reading a field marked for removal, which is exactly what has to happen here: the
+    // parameter is only still there so that a pom configuring it keeps working, and telling its author so
+    // means reading it
+    @SuppressWarnings("java:S5738")
     public void execute() throws MojoExecutionException {
         try {
             log.info("Processing markdown file: {}", inputFile);
 
-            String githubToken = System.getenv(tokenEnvVarName);
-            GitHubHttpClient gitHubHttpClient = new GitHubHttpClient(githubToken);
+            if (tokenEnvVarName != null) {
+                log.warn("Parameter 'tokenEnvVarName' is deprecated and ignored: markdown is rendered locally, the GitHub API is no longer called");
+            }
 
             String markdown = Files.readString(inputFile.toPath(), StandardCharsets.UTF_8);
 
@@ -79,7 +109,7 @@ public class MarkdownToHtmlMojo extends AbstractMojo {
                 }
             }
 
-            String html = gitHubHttpClient.convertMarkdownToHtml(filteredMarkdown);
+            String html = new MarkdownRenderer(highlightCode).render(filteredMarkdown);
 
             if (ImageProcessingType.EMBED.equals(imageProcessingType)) {
                 log.info("Embedding images");
@@ -94,6 +124,12 @@ public class MarkdownToHtmlMojo extends AbstractMojo {
             if (generateHeadingIds) {
                 log.info("Generating heading IDs");
                 html = new HtmlProcessor().addHeadingIds(html);
+            }
+
+            // Last, so that every step before it sees the markup on its own, without the wrapper
+            if (embedStylesheet) {
+                log.info("Embedding the GitHub markdown stylesheet");
+                html = new StylesheetEmbedder().embed(html);
             }
 
             log.info("Writing html to file: {}", outputFile);

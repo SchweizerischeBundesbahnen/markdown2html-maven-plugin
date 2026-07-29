@@ -1,0 +1,50 @@
+/*
+ * Takes off everything github.com adds that a local renderer cannot and should not reproduce, so that the
+ * two screenshots differ only where the rendering itself differs. Applied to both sides.
+ *
+ * Each rule here is a difference the plugin's README documents; nothing else may be neutralised, or the
+ * test stops being able to see a regression.
+ */
+
+/* A fixed page box, so the screenshots do not depend on the window */
+html, body {
+    margin: 0;
+    padding: 0;
+    background: #ffffff;
+}
+
+.markdown-body {
+    box-sizing: border-box;
+    width: 900px;
+    padding: 24px;
+}
+
+/* GitHub appends a permalink anchor with an octicon to every heading */
+.markdown-body .anchor,
+.markdown-body .octicon,
+.markdown-body svg {
+    display: none !important;
+}
+
+/* ...and wraps the heading itself in a div, where locally the heading is the block */
+.markdown-body .markdown-heading {
+    display: contents !important;
+}
+
+/* Linguist and the local lexers tokenize differently by construction, so only the layout of code counts */
+.markdown-body pre span,
+.markdown-body code span {
+    color: inherit !important;
+    background: none !important;
+    font-weight: inherit !important;
+    font-style: inherit !important;
+}
+
+/* GitHub serves images through its camo proxy and fits them to the page; with the network cut neither side
+   loads anything, so both are reduced to a box of the same size */
+.markdown-body img {
+    visibility: hidden !important;
+    width: 32px !important;
+    height: 32px !important;
+    max-width: none !important;
+}
