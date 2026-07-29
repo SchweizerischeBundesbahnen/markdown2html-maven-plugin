@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.7.1](https://github.com/SchweizerischeBundesbahnen/markdown2html-maven-plugin/compare/v1.7.0...v1.7.1) (2026-07-29)
+
+
+### Bug Fixes
+
+* central sources and javadoc ([#79](https://github.com/SchweizerischeBundesbahnen/markdown2html-maven-plugin/issues/79)) ([c99b3b6](https://github.com/SchweizerischeBundesbahnen/markdown2html-maven-plugin/commit/c99b3b6e798e656911a748911089689e1fbcadb8))
+
 ## [1.7.0](https://github.com/SchweizerischeBundesbahnen/markdown2html-maven-plugin/compare/v1.6.0...v1.7.0) (2026-07-29)
 
 
