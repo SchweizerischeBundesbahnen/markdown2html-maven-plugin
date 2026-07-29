@@ -5,14 +5,20 @@ import org.jetbrains.annotations.NotNull;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
-import org.jsoup.parser.Parser;
 import org.jsoup.select.Elements;
 
 public class ExternalLinkProcessor {
 
     public @NotNull String processExternalLinks(@NotNull String html) {
-        // Parse the HTML string into a Jsoup Document without altering the original formatting
-        Document document = Jsoup.parse(html, "", Parser.xmlParser());
+        // Parsed as an HTML body fragment, NOT as XML. To an XML parser a void element like <br> is
+        // merely unclosed, so everything after it becomes its child and all of them are closed at the
+        // end of the enclosing block - serializing as `text<br>more</br></br>`. A browser reads each
+        // stray </br> as another line break, so a paragraph carrying three soft breaks rendered with
+        // three extra blank lines after it.
+        Document document = Jsoup.parseBodyFragment(html);
+        // Keep the original formatting: pretty-printing re-indents and re-wraps the markup, which
+        // matters for whitespace-sensitive content such as <pre> code blocks.
+        document.outputSettings().prettyPrint(false);
 
         Elements links = document.select("a[href]");
 
@@ -25,8 +31,8 @@ public class ExternalLinkProcessor {
             }
         }
 
-        // Return the modified HTML as a string while preserving the original formatting
-        return document.outerHtml();
+        // Only the fragment that came in: parseBodyFragment wraps it in a full html/head/body document.
+        return document.body().html();
     }
 
     private static void addTargetAttribute(@NotNull Element link) {
