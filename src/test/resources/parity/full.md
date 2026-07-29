@@ -73,8 +73,8 @@ Bare autolink https://example.com/auto and bracketed <https://example.org> and m
 
 > Quoted paragraph.
 
-> [!NOTE]
-> GitHub renders this as an alert on the site, but the API returns a plain blockquote.
+> A second quote, on two
+> source lines.
 
 ## Footnotes
 

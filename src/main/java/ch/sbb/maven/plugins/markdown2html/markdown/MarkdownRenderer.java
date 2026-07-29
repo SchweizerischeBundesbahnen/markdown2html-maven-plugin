@@ -1,5 +1,6 @@
 package ch.sbb.maven.plugins.markdown2html.markdown;
 
+import ch.sbb.maven.plugins.markdown2html.alert.GitHubAlertsExtension;
 import org.commonmark.Extension;
 import org.commonmark.ext.autolink.AutolinkExtension;
 import org.commonmark.ext.footnotes.FootnotesExtension;
@@ -23,15 +24,18 @@ import java.util.List;
 public class MarkdownRenderer {
 
     /**
-     * CommonMark plus the four extensions the GFM spec adds on top of it, plus footnotes, which GitHub
-     * supports in Markdown files although the GFM spec doesn't cover them.
+     * CommonMark plus the four extensions the GFM spec adds on top of it, plus the two things GitHub renders
+     * in Markdown files although the spec covers neither: footnotes and alerts.
      */
     private static final List<Extension> EXTENSIONS = List.of(
             TablesExtension.create(),
             StrikethroughExtension.create(),
             TaskListItemsExtension.create(),
             AutolinkExtension.create(),
-            FootnotesExtension.create()
+            FootnotesExtension.create(),
+            // Not in the GFM spec either, but GitHub renders them in Markdown files and the plugin used to
+            // get them back from the API
+            GitHubAlertsExtension.create()
     );
 
     private final Parser parser;
