@@ -1,0 +1,91 @@
+
+<h1>Heading level 1</h1>
+<p>Intro paragraph with <strong>bold</strong>, <em>emphasis</em>, <del>strikethrough</del> and <code>inline code</code>.</p>
+<h2>Heading level 2</h2>
+<p>A soft
+break stays a newline, while a hard break<br>
+does not.</p>
+<h3>Übersicht: heading with a non-ASCII title</h3>
+<h4>Heading level 4</h4>
+<h5>Heading level 5</h5>
+<h6>Heading level 6</h6>
+<h2>Lists</h2>
+<ul>
+<li>item one</li>
+<li>item two
+<ul>
+<li>nested item</li>
+</ul>
+</li>
+</ul>
+<ol>
+<li>first</li>
+<li>second</li>
+</ol>
+<h2>Code</h2>
+<pre><code class="language-java"><span style="color:#cf222e">public</span> <span style="color:#cf222e">class</span> Test {
+    <span style="color:#cf222e">public</span> <span style="color:#cf222e">static</span> <span style="color:#cf222e">void</span> main(<span style="color:#8250df">String</span>[] args) {
+        <span style="color:#8250df">System</span>.out.println(<span style="color:#0a3069">"Hello, &lt;World&gt; &amp; 'you'!"</span>);
+    }
+}
+</code></pre>
+<pre><code class="language-bash">mvn clean package
+</code></pre>
+<pre><code>fenced code block without a language
+</code></pre>
+<pre><code>indented code block
+</code></pre>
+<h2>Table</h2>
+<table>
+<thead>
+<tr>
+<th>Version</th>
+<th>Changes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>v1.0.0</td>
+<td>Initial release</td>
+</tr>
+<tr>
+<td>v1.0.1</td>
+<td>Fixes <code>inline code</code></td>
+</tr>
+</tbody>
+</table>
+<h2>Links and images</h2>
+<p>Absolute <a href="https://example.com/page">link</a>, relative <a href="docs/page.md">link</a>, anchor <a href="#heading-level-1">link</a>.</p>
+<p>Bare autolink <a href="https://example.com/auto">https://example.com/auto</a> and bracketed <a href="https://example.org">https://example.org</a> and mail <a href="mailto:foo@bar.com">foo@bar.com</a>.</p>
+<p><img src="img/x.png" alt="relative image"></p>
+<p><a href="https://example.com/target"><img src="https://example.com/badge.svg" alt="badge"></a></p>
+<h2>Quotes</h2>
+<blockquote>
+<p>Quoted paragraph.</p>
+</blockquote>
+<blockquote>
+<p>A second quote, on two
+source lines.</p>
+</blockquote>
+<h2>Footnotes</h2>
+<p>Statement needing a source<sup class="footnote-ref"><a href="#fn-1" id="fnref-1" data-footnote-ref>1</a></sup> and another one<sup class="footnote-ref"><a href="#fn-note" id="fnref-note" data-footnote-ref>2</a></sup>.</p>
+<h2>Raw HTML</h2>
+<div align="center">
+  Raw HTML block content
+</div>
+<details>
+<summary>Click to expand</summary>
+<p>Hidden <strong>content</strong>.</p>
+</details>
+<hr>
+<p>Last paragraph.</p>
+<section class="footnotes" data-footnotes>
+<ol>
+<li id="fn-1">
+<p>The first footnote. <a href="#fnref-1" class="footnote-backref" data-footnote-backref data-footnote-backref-idx="1" aria-label="Back to reference 1">↩</a></p>
+</li>
+<li id="fn-note">
+<p>The second footnote. <a href="#fnref-note" class="footnote-backref" data-footnote-backref data-footnote-backref-idx="2" aria-label="Back to reference 2">↩</a></p>
+</li>
+</ol>
+</section>

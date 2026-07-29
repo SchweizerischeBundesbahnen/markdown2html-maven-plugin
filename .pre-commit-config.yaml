@@ -13,14 +13,17 @@ repos:
       - id: check-case-conflict
       - id: check-merge-conflict
       - id: trailing-whitespace
-        # The renderer fixtures encode hard line breaks as two trailing spaces
-        exclude: ^src/test/resources/(parity|renderer)/.+\.md$
+        # The renderer fixtures encode hard line breaks as two trailing spaces, and the baselines are
+        # verbatim recordings of what each renderer produced - editing either defeats their purpose
+        exclude: ^src/test/resources/(parity|renderer|baseline)/.+$
       - id: check-xml
       - id: check-json
       - id: check-yaml
       - id: no-commit-to-branch
       - id: mixed-line-ending
       - id: end-of-file-fixer
+        # GitHub's response carries no trailing newline; adding one would make the recording a lie
+        exclude: ^src/test/resources/baseline/.+$
   - repo: local
     hooks:
       - id: sensitive-data-leak-urls

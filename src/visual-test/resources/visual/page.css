@@ -1,0 +1,17 @@
+/*
+ * Nothing but a fixed page box, so that a screenshot depends on the rendering and not on the window it was
+ * taken in. Unlike neutralize.css this hides nothing: the point of the image baselines is to see the
+ * output exactly as a reader gets it, colours included.
+ */
+
+html, body {
+    margin: 0;
+    padding: 0;
+    background: #ffffff;
+}
+
+.markdown-body {
+    box-sizing: border-box;
+    width: 900px;
+    padding: 24px;
+}
