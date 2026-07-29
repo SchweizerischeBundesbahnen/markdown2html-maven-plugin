@@ -430,12 +430,6 @@
             <id>central-publishing</id>
             <build>
                 <plugins>
-                    <!--
-                        Maven Central rejects a deployment without them: "Sources must be provided but not
-                        found in entries". Only the publishing profile builds them - they are of no use to
-                        the other builds, and the workflow that deploys to GitHub Packages skips them with
-                        maven.source.skip and maven.javadoc.skip.
-                    -->
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-source-plugin</artifactId>
