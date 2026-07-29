@@ -59,9 +59,11 @@ browser and comparing screenshots. It needs a browser, so it runs in its own CI 
 `visual-parity` profile:
 
 ```bash
-mvn -P visual-parity test-compile exec:java@install-browser   # once, downloads a browser
-mvn -P visual-parity test -Dtest=VisualParityTest -DfailIfNoSpecifiedTests=false
+mvn -P visual-parity verify
 ```
+
+The profile brings what it needs: it installs the browser, runs the comparison against GitHub, and checks
+the image baselines below in their container.
 
 ### Baselines
 
@@ -74,11 +76,11 @@ they stop agreeing, so both sides are also recorded:
 - `src/visual-test/resources/baseline/{text,code,blocks}.png` — how the output looks, syntax colours and
   alerts included, which is the part the live comparison has to switch off. One picture per area, so a
   failure names where to look. Text rasterises differently on every platform, so these are recorded and
-  checked inside the Playwright container:
+  checked inside the Playwright container, which the profile starts for them. To re-record after an
+  intended change:
 
 ```bash
-./src/visual-test/record-baselines.sh --check   # compare
-./src/visual-test/record-baselines.sh           # re-record, then review the diff
+mvn -P visual-parity verify -Dvisual.baseline.update=true
 ```
 
 ## Build

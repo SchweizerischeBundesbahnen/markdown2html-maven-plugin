@@ -75,6 +75,9 @@
         <playwright.version>1.61.0</playwright.version>
         <build-helper-maven-plugin.version>3.6.1</build-helper-maven-plugin.version>
         <exec-maven-plugin.version>3.6.3</exec-maven-plugin.version>
+        <!-- Pinned to the playwright dependency: a browser of another version rasterises differently -->
+        <playwright.image>mcr.microsoft.com/playwright/java:v1.61.0</playwright.image>
+        <visual.baseline.update>false</visual.baseline.update>
 
         <maven-gpg-plugin.version>3.2.8</maven-gpg-plugin.version>
         <sonar-maven-plugin.version>5.7.0.6970</sonar-maven-plugin.version>
@@ -322,21 +325,74 @@
                             </execution>
                         </executions>
                     </plugin>
-                    <!-- Installs the browser: mvn -P visual-parity test-compile exec:java@install-browser -->
                     <plugin>
                         <groupId>org.codehaus.mojo</groupId>
                         <artifactId>exec-maven-plugin</artifactId>
                         <version>${exec-maven-plugin.version}</version>
                         <executions>
+                            <!-- The browser VisualParityTest drives, on this machine -->
                             <execution>
                                 <id>install-browser</id>
+                                <phase>pre-integration-test</phase>
+                                <goals>
+                                    <goal>exec</goal>
+                                </goals>
                                 <configuration>
-                                    <mainClass>com.microsoft.playwright.CLI</mainClass>
+                                    <!--
+                                        In a process of its own: the Playwright CLI ends with System.exit,
+                                        which run in Maven's own JVM would take the build down with it
+                                        before anything bound after this ever runs.
+                                    -->
+                                    <executable>${java.home}/bin/java</executable>
                                     <classpathScope>test</classpathScope>
                                     <arguments>
+                                        <argument>-classpath</argument>
+                                        <classpath/>
+                                        <argument>com.microsoft.playwright.CLI</argument>
                                         <argument>install</argument>
-                                        <argument>--with-deps</argument>
                                         <argument>chromium</argument>
+                                    </arguments>
+                                </configuration>
+                            </execution>
+                            <!--
+                                The image baselines, on the other hand, only hold where they were recorded:
+                                text rasterises differently on every platform, so this one runs in the
+                                Playwright image pinned to the version of the dependency, on the
+                                architecture the CI runner uses. The classes are already built here - the
+                                container contributes nothing but its browser and its fonts.
+
+                                Record them again with -Dvisual.baseline.update=true, then review the diff.
+                            -->
+                            <execution>
+                                <id>check-visual-baselines</id>
+                                <phase>integration-test</phase>
+                                <goals>
+                                    <goal>exec</goal>
+                                </goals>
+                                <configuration>
+                                    <executable>docker</executable>
+                                    <arguments>
+                                        <argument>run</argument>
+                                        <argument>--rm</argument>
+                                        <argument>--platform</argument>
+                                        <argument>linux/amd64</argument>
+                                        <argument>--volume</argument>
+                                        <argument>${project.basedir}:/repository</argument>
+                                        <argument>--volume</argument>
+                                        <argument>${settings.localRepository}:/root/.m2/repository</argument>
+                                        <argument>--workdir</argument>
+                                        <argument>/repository</argument>
+                                        <argument>--env</argument>
+                                        <argument>VISUAL_BASELINE_CONTAINER=1</argument>
+                                        <argument>${playwright.image}</argument>
+                                        <argument>mvn</argument>
+                                        <argument>--batch-mode</argument>
+                                        <argument>-P</argument>
+                                        <argument>visual-parity</argument>
+                                        <argument>surefire:test</argument>
+                                        <argument>-Dtest=VisualBaselineTest</argument>
+                                        <argument>-DfailIfNoSpecifiedTests=false</argument>
+                                        <argument>-Dvisual.baseline.update=${visual.baseline.update}</argument>
                                     </arguments>
                                 </configuration>
                             </execution>

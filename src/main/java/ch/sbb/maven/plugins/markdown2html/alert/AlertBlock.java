@@ -12,5 +12,5 @@ import org.commonmark.node.CustomBlock;
 @RequiredArgsConstructor
 public class AlertBlock extends CustomBlock {
 
-    private final transient GitHubAlert alert;
+    private final GitHubAlert alert;
 }

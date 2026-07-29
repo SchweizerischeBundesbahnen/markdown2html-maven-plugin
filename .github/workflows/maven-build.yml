@@ -111,16 +111,10 @@ jobs:
           path: ~/.cache/ms-playwright
           key: ${{ runner.os }}-playwright-${{ hashFiles('pom.xml') }}
           restore-keys: ${{ runner.os }}-playwright-
-      - name: 🌐 Install the Playwright browser
-        run: mvn --batch-mode -s "${SETTINGS_XML}" -P visual-parity test-compile exec:java@install-browser
-      - name: 🖼️ Compare the rendering with GitHub's
-        # On a failure, reproduce it locally to see the screenshots the test writes to target/visual-parity:
-        # mvn -P visual-parity test -Dtest=VisualParityTest -DfailIfNoSpecifiedTests=false
-        run: mvn --batch-mode -s "${SETTINGS_XML}" -P visual-parity test -Dtest=VisualParityTest -DfailIfNoSpecifiedTests=false
-      - name: 🧾 Compare the rendering with the recorded baselines
-        # In the Playwright container, which is where the baselines were recorded: text rasterises
-        # differently everywhere else, the runner included
-        run: ./src/visual-test/record-baselines.sh --check
+      - name: 🖼️ Compare the rendering with GitHub's and with the baselines
+        # The profile brings its own browser and, for the image baselines, its own container. Reproduce a
+        # failure locally with the same line; the screenshots land in target/visual-parity.
+        run: mvn --batch-mode -s "${SETTINGS_XML}" -P visual-parity verify
   deploy-maven-central:
     needs: build
     if: ${{ needs.build.outputs.is_release == 'true' && github.ref == 'refs/heads/main' }}

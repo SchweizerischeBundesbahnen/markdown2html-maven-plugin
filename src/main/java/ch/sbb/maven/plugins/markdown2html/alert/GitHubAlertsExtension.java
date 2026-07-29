@@ -80,7 +80,9 @@ public class GitHubAlertsExtension implements Parser.ParserExtension, HtmlRender
             removeMarker(paragraph, marker);
 
             AlertBlock alertBlock = new AlertBlock(alert);
-            for (Node child = blockQuote.getFirstChild(); child != null; ) {
+            // Read the sibling before moving the node: appending it rewires the link this walk follows
+            Node child = blockQuote.getFirstChild();
+            while (child != null) {
                 Node next = child.getNext();
                 alertBlock.appendChild(child);
                 child = next;
@@ -136,7 +138,8 @@ public class GitHubAlertsExtension implements Parser.ParserExtension, HtmlRender
         }
 
         private void renderChildren(@NotNull Node parent) {
-            for (Node child = parent.getFirstChild(); child != null; ) {
+            Node child = parent.getFirstChild();
+            while (child != null) {
                 Node next = child.getNext();
                 context.render(child);
                 child = next;

@@ -28,10 +28,11 @@ import static org.junit.jupiter.api.Assumptions.abort;
  * the only one that sees an alert rendered, since the API mode that test uses renders none.
  * <p>
  * Text rasterises differently on every platform, so the baseline is only meaningful in one: the Playwright
- * image pinned to the same version as the dependency. Outside it the test aborts rather than fail on
- * somebody's font stack. To take the picture again after an intended change:
+ * image pinned to the same version as the dependency. The {@code visual-parity} profile runs it there for
+ * you; started anywhere else it aborts rather than fail on somebody's font stack. To take the pictures
+ * again after an intended change:
  * <pre>
- * ./src/visual-test/record-baselines.sh
+ * mvn -P visual-parity verify -Dvisual.baseline.update=true
  * </pre>
  * <p>
  * One picture per area - text, code, blocks - so that a failure names where to look, and so that no
@@ -56,8 +57,8 @@ class VisualBaselineTest {
     @SneakyThrows
     void render_fixture_stillLooksLikeTheRecordedBaseline(String fixture) {
         if (!"1".equals(System.getenv("VISUAL_BASELINE_CONTAINER"))) {
-            abort("The image baselines only hold in the pinned Playwright container - "
-                    + "run ./src/visual-test/record-baselines.sh, or --check to compare against them");
+            abort("The image baselines only hold in the pinned Playwright container, "
+                    + "which mvn -P visual-parity verify runs them in");
         }
 
         byte[] screenshot = screenshot(new MarkdownRenderer().render(readResource("visual/baseline-" + fixture + ".md")));
