@@ -109,6 +109,7 @@ This plugin can be used in a maven project by adding the following to the `pom.x
                         <removeLinesUsingPattern>(?m)^.*\[Vulnerabilities\].*(\R|)</removeLinesUsingPattern>
                     </removeLinesUsingPatterns>
                     <imageProcessingType>EMBED</imageProcessingType>
+                    <embedStylesheet>true</embedStylesheet>
                 </configuration>
             </plugin>
 ...

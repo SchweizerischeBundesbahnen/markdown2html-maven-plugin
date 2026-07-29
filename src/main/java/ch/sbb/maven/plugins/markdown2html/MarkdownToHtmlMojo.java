@@ -1,6 +1,7 @@
 package ch.sbb.maven.plugins.markdown2html;
 
 import ch.sbb.maven.plugins.markdown2html.html.HtmlProcessor;
+import ch.sbb.maven.plugins.markdown2html.html.StylesheetEmbedder;
 import ch.sbb.maven.plugins.markdown2html.images.ImageProcessingType;
 import ch.sbb.maven.plugins.markdown2html.images.ImagesProcessor;
 import ch.sbb.maven.plugins.markdown2html.links.ExternalLinkProcessor;
@@ -70,6 +71,14 @@ public class MarkdownToHtmlMojo extends AbstractMojo {
     @Parameter(property = "imageProcessingType", defaultValue = "NONE")
     private ImageProcessingType imageProcessingType;
 
+    /**
+     * Wraps the output in GitHub's markdown stylesheet, so that a page embedding it gets GitHub's typography
+     * without providing styles of its own. Every rule is scoped to the {@code markdown-body} class the
+     * content is wrapped in.
+     */
+    @Parameter(property = "embedStylesheet", defaultValue = "false")
+    private boolean embedStylesheet;
+
     public void execute() throws MojoExecutionException {
         try {
             log.info("Processing markdown file: {}", inputFile);
@@ -108,6 +117,12 @@ public class MarkdownToHtmlMojo extends AbstractMojo {
             if (generateHeadingIds) {
                 log.info("Generating heading IDs");
                 html = new HtmlProcessor().addHeadingIds(html);
+            }
+
+            // Last, so that every step before it sees the markup on its own, without the wrapper
+            if (embedStylesheet) {
+                log.info("Embedding the GitHub markdown stylesheet");
+                html = new StylesheetEmbedder().embed(html);
             }
 
             log.info("Writing html to file: {}", outputFile);
