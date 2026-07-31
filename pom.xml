@@ -60,7 +60,7 @@
         <maven-surefire-plugin.version>3.5.6</maven-surefire-plugin.version>
         <lombok.version>1.18.46</lombok.version>
 
-        <httpclient5.version>5.6.2</httpclient5.version>
+        <httpclient5.version>5.6.3</httpclient5.version>
         <commonmark.version>0.29.0</commonmark.version>
         <rsyntaxtextarea.version>4.0.1</rsyntaxtextarea.version>
         <jackson-databind.version>2.22.1</jackson-databind.version>
