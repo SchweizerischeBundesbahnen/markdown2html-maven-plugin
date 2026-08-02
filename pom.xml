@@ -65,7 +65,7 @@
         <rsyntaxtextarea.version>4.0.1</rsyntaxtextarea.version>
         <jackson-databind.version>2.22.1</jackson-databind.version>
         <icu4j.version>78.3</icu4j.version>
-        <jsoup.version>1.22.2</jsoup.version>
+        <jsoup.version>1.23.1</jsoup.version>
 
         <junit-jupiter-api.version>6.1.2</junit-jupiter-api.version>
         <mockito-core.version>5.23.0</mockito-core.version>
