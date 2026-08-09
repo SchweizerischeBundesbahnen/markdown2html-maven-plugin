@@ -1,7 +1,6 @@
 package ch.sbb.maven.plugins.markdown2html.util;
 
 import lombok.SneakyThrows;
-import lombok.experimental.UtilityClass;
 import org.apache.hc.client5.http.classic.methods.HttpGet;
 import org.apache.hc.client5.http.impl.classic.CloseableHttpClient;
 import org.apache.hc.client5.http.impl.classic.HttpClients;
@@ -13,10 +12,24 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.nio.file.Files;
 
-@UtilityClass
-public class Utils {
+/**
+ * The odds and ends the processors share: telling an address that leaves the repository from one that stays
+ * inside it, and reading what either of them points at.
+ */
+public final class Utils {
 
-    public String replaceRelativeUrl(String url, String prefix) {
+    private Utils() {
+        // Nothing to instantiate; lombok's @UtilityClass would hide the constructor from javadoc, which
+        // then reports a public default one this class does not have
+    }
+
+    /**
+     * @param url    the address to look at
+     * @param prefix what to put in front of it, with or without a trailing slash
+     * @return the address made absolute, or the address itself when it already was, or when it points
+     * within the same page
+     */
+    public static String replaceRelativeUrl(String url, String prefix) {
         // Check if the URL is neither absolute (starts with http/https) nor internal (starts with #)
         if (!isAbsoluteUrl(url) && !url.startsWith("#")) {
             // Ensure relativeLinkPrefix ends with /
@@ -34,12 +47,21 @@ public class Utils {
         return url;
     }
 
-    public boolean isAbsoluteUrl(String url) {
+    /**
+     * @param url the address to look at
+     * @return whether it names a host of its own rather than a place in the repository
+     */
+    public static boolean isAbsoluteUrl(String url) {
         return url.matches("^(http|https|ftp)://.*");
     }
 
+    /**
+     * @param url what to fetch
+     * @return what came back, with the content type the server gave it
+     * @throws IllegalStateException if the server answered with anything but 200
+     */
     @SneakyThrows
-    public Resource getResourceByURL(String url) {
+    public static Resource getResourceByURL(String url) {
         try (CloseableHttpClient client = HttpClients.createDefault()) {
             HttpGet request = new HttpGet(url);
             HttpClientResponseHandler<Resource> responseHandler = response -> {
@@ -54,8 +76,13 @@ public class Utils {
         }
     }
 
+    /**
+     * @param path the file to read
+     * @return its bytes, with the content type guessed from it
+     * @throws java.io.FileNotFoundException if there is no such file
+     */
     @SneakyThrows
-    public Resource getResourceByPath(String path) {
+    public static Resource getResourceByPath(String path) {
         File file = new File(path);
         if (!file.exists() || !file.isFile()) {
             throw new FileNotFoundException("File not found: " + path);
