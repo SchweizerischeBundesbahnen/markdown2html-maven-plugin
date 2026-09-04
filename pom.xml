@@ -57,7 +57,7 @@
         <maven-plugin-plugin.version>3.15.2</maven-plugin-plugin.version>
         <maven-plugin-annotations.version>3.13.1</maven-plugin-annotations.version>
         <maven-plugin-api.version>3.9.8</maven-plugin-api.version>
-        <maven-surefire-plugin.version>3.5.6</maven-surefire-plugin.version>
+        <maven-surefire-plugin.version>3.6.0</maven-surefire-plugin.version>
         <lombok.version>1.18.46</lombok.version>
 
         <httpclient5.version>5.6.4</httpclient5.version>
