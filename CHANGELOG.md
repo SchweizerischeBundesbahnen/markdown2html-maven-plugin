@@ -1,5 +1,18 @@
 # Changelog
 
+## [1.7.2](https://github.com/SchweizerischeBundesbahnen/markdown2html-maven-plugin/compare/v1.7.1...v1.7.2) (2026-09-05)
+
+
+### Bug Fixes
+
+* **deps:** update commonmark.version to v0.30.0 ([e154927](https://github.com/SchweizerischeBundesbahnen/markdown2html-maven-plugin/commit/e1549272559301c99352f7e563f8034dc177126c))
+* **deps:** update dependency org.apache.httpcomponents.client5:httpclient5 to v5.6.3 ([f13b8e9](https://github.com/SchweizerischeBundesbahnen/markdown2html-maven-plugin/commit/f13b8e90b320abe73578661a990ea88168531bad))
+* **deps:** update dependency org.apache.httpcomponents.client5:httpclient5 to v5.6.4 ([58756f9](https://github.com/SchweizerischeBundesbahnen/markdown2html-maven-plugin/commit/58756f9c0f4b083cf7d4cfae0c5c6e602b2a1f09))
+* **deps:** update dependency org.apache.maven.plugins:maven-compiler-plugin to v3.16.0 ([2ca7fc4](https://github.com/SchweizerischeBundesbahnen/markdown2html-maven-plugin/commit/2ca7fc45d27224a1282bfa14e6408579733f30bc))
+* **deps:** update dependency org.apache.maven.plugins:maven-surefire-plugin to v3.6.0 ([98cf288](https://github.com/SchweizerischeBundesbahnen/markdown2html-maven-plugin/commit/98cf28851d06c057b003cc15208753a72b48b07c))
+* **deps:** update dependency org.jsoup:jsoup to v1.23.1 ([909afd4](https://github.com/SchweizerischeBundesbahnen/markdown2html-maven-plugin/commit/909afd4391f0fc6d64d282968fda8830a8491365))
+* **deps:** update dependency org.jsoup:jsoup to v1.23.2 ([f72c223](https://github.com/SchweizerischeBundesbahnen/markdown2html-maven-plugin/commit/f72c2233ba43d8058dd5650a0c8f9bf18a4e5adf))
+
 ## [1.7.1](https://github.com/SchweizerischeBundesbahnen/markdown2html-maven-plugin/compare/v1.7.0...v1.7.1) (2026-07-29)
 
 
