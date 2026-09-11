@@ -7,8 +7,22 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
+/**
+ * Makes the links that leave the document open in a new tab, so that a reader following one does not lose
+ * the page it is embedded in.
+ */
 public class ExternalLinkProcessor {
+    /** Creates a processor. It keeps nothing between the documents it is given. */
+    public ExternalLinkProcessor() {
+        // Nothing to set up
+    }
 
+
+    /**
+     * @param html the rendered document
+     * @return the same markup, with {@code target="_blank"} on every absolute link that did not carry a
+     * target already
+     */
     public @NotNull String processExternalLinks(@NotNull String html) {
         // Parsed as an HTML body fragment, NOT as XML. To an XML parser a void element like <br> is
         // merely unclosed, so everything after it becomes its child and all of them are closed at the

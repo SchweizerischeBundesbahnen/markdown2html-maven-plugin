@@ -8,9 +8,26 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/**
+ * Takes parts out of a document before it is rendered. A README carries sections that belong to whoever
+ * builds the project - how to compile it, how to install it, its changelog - and not to whoever reads the
+ * page it ends up on.
+ * <p>
+ * Everything here leaves the document untouched when given nothing to remove.
+ */
 @Slf4j
 public class MarkdownProcessor {
+    /** Creates a processor. It keeps nothing between the documents it is given. */
+    public MarkdownProcessor() {
+        // Nothing to set up
+    }
 
+
+    /**
+     * @param markdown        the document to cut
+     * @param excludeChapters the headings to remove, each with its own text, as in {@code ## Build}
+     * @return the document without those chapters
+     */
     public @NotNull String removeChapter(@NotNull String markdown, @Nullable List<String> excludeChapters) {
         if (excludeChapters == null) {
             return markdown;
@@ -25,6 +42,14 @@ public class MarkdownProcessor {
         return markdown;
     }
 
+    /**
+     * Removes one chapter: its heading and everything under it, up to the next heading of the same level or
+     * higher.
+     *
+     * @param markdown     the document to cut
+     * @param chapterTitle the heading to remove, with its own text, as in {@code ## Build}
+     * @return the document without that chapter
+     */
     public @NotNull String removeChapter(@NotNull String markdown, @Nullable String chapterTitle) {
         if (chapterTitle == null || chapterTitle.isEmpty()) {
             return markdown;
@@ -47,6 +72,11 @@ public class MarkdownProcessor {
         return result.replaceAll("(?m)^\\s*\\R", "\n").trim();
     }
 
+    /**
+     * @param markdown       the document to cut
+     * @param lineSubstrings the texts to look for; a line holding any of them goes
+     * @return the document without those lines
+     */
     public @NotNull String removeLinesContainingSubstrings(@NotNull String markdown, @Nullable List<String> lineSubstrings) {
         if (lineSubstrings == null) {
             return markdown;
@@ -61,6 +91,11 @@ public class MarkdownProcessor {
         return markdown;
     }
 
+    /**
+     * @param markdown   the document to cut
+     * @param linePrefix the text to look for; a line holding it goes, wherever in the line it sits
+     * @return the document without those lines
+     */
     public @NotNull String removeLinesWithSubstring(@NotNull String markdown, @Nullable String linePrefix) {
         if (linePrefix == null || linePrefix.isEmpty()) {
             return markdown;
@@ -69,6 +104,11 @@ public class MarkdownProcessor {
         return markdown.replaceAll("(?m)^.*" + Pattern.quote(linePrefix) + ".*(\\R|)", "");
     }
 
+    /**
+     * @param markdown     the document to cut
+     * @param linePatterns the regular expressions to match; what any of them matches goes
+     * @return the document without what they matched
+     */
     public @NotNull String removeLinesUsingRegExPatterns(@NotNull String markdown, @Nullable List<String> linePatterns) {
         if (linePatterns == null) {
             return markdown;
@@ -83,6 +123,11 @@ public class MarkdownProcessor {
         return markdown;
     }
 
+    /**
+     * @param markdown    the document to cut
+     * @param linePattern the regular expression to match; what it matches goes
+     * @return the document without what it matched
+     */
     public @NotNull String removeLinesWithPattern(@NotNull String markdown, @Nullable String linePattern) {
         if (linePattern == null) {
             return markdown;
