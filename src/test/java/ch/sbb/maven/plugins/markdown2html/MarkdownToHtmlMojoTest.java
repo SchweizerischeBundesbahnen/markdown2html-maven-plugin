@@ -179,6 +179,31 @@ class MarkdownToHtmlMojoTest {
         assertFalse(Files.exists(outputFile));
     }
 
+    @Test
+    @SneakyThrows
+    void execute_skip_writesNothing() {
+        Files.writeString(inputFile, "# Title\n", StandardCharsets.UTF_8);
+        set("skip", true);
+
+        mojo.execute();
+
+        assertFalse(Files.exists(outputFile));
+    }
+
+    /**
+     * A skipped conversion reads nothing, so a missing input does not fail it.
+     */
+    @Test
+    @SneakyThrows
+    void execute_skipAndUnreadableInput_doesNotFail() {
+        set("inputFile", directory.resolve("missing.md").toFile());
+        set("skip", true);
+
+        mojo.execute();
+
+        assertFalse(Files.exists(outputFile));
+    }
+
     @SneakyThrows
     private String convert(String markdown) {
         Files.writeString(inputFile, markdown, StandardCharsets.UTF_8);

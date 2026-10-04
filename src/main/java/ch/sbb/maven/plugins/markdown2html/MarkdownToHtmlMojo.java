@@ -82,11 +82,22 @@ public class MarkdownToHtmlMojo extends AbstractMojo {
     @Parameter(property = "embedStylesheet", defaultValue = "false")
     private boolean embedStylesheet;
 
+    /**
+     * Skips the conversion: nothing is read and nothing is written. The property has a prefix, unlike the other
+     * parameters, as a bare {@code skip} property would skip every plugin which reads it.
+     */
+    @Parameter(property = "markdown2html.skip", defaultValue = "false")
+    private boolean skip;
+
     // S5738 objects to reading a field marked for removal, which is exactly what has to happen here: the
     // parameter is only still there so that a pom configuring it keeps working, and telling its author so
     // means reading it
     @SuppressWarnings("java:S5738")
     public void execute() throws MojoExecutionException {
+        if (skip) {
+            log.info("Skipping the conversion of {}", inputFile);
+            return;
+        }
         try {
             log.info("Processing markdown file: {}", inputFile);
 
