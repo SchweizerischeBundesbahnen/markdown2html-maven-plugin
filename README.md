@@ -147,5 +147,12 @@ This plugin can be used in a maven project by adding the following to the `pom.x
     </build>
 ```
 
+`skip`, or the property `markdown2html.skip`, skips the conversion: nothing is read and nothing is written. A build
+skips it for a run which needs no generated page:
+
+```bash
+mvn verify -Dmarkdown2html.skip=true
+```
+
 `tokenEnvVarName` is deprecated and ignored - no GitHub token is needed anymore. It is still accepted, since
 Maven fails on configuration it cannot map to a parameter, and can be dropped from the `pom.xml`.
