@@ -21,8 +21,19 @@ public class StylesheetEmbedder {
     private static final String STYLESHEET = "github-markdown-light.css";
     private static final String CONTENT_CLASS = "markdown-body";
 
-    // The newlines are HTML the generated file carries, not console output, so they stay "\n" on every
-    // platform - which is also why this is concatenated rather than formatted.
+    /** Creates an embedder. The stylesheet is read from the plugin on each call. */
+    public StylesheetEmbedder() {
+        // Nothing to set up
+    }
+
+    /**
+     * The newlines are HTML the generated file carries, not console output, so they stay {@code \n} on
+     * every platform - which is also why this is concatenated rather than formatted.
+     *
+     * @param html the rendered document
+     * @return the document wrapped in the stylesheet and in the class its rules are scoped to
+     * @throws IOException if the stylesheet cannot be read out of the plugin
+     */
     public @NotNull String embed(@NotNull String html) throws IOException {
         return "<style>\n" + readStylesheet() + "</style>\n"
                 + "<div class=\"" + CONTENT_CLASS + "\">\n" + html + "</div>\n";
