@@ -97,7 +97,7 @@
         <sonar.verbose>true</sonar.verbose>
         <sonar.qualitygate.wait>true</sonar.qualitygate.wait>
 
-        <central-publishing-maven-plugin.version>0.11.0</central-publishing-maven-plugin.version>
+        <central-publishing-maven-plugin.version>0.12.0</central-publishing-maven-plugin.version>
         <central-publishing-maven-plugin.autoPublish>true</central-publishing-maven-plugin.autoPublish>
     </properties>
 
@@ -364,6 +364,11 @@
                                 container contributes nothing but its browser and its fonts.
 
                                 Record them again with -Dvisual.baseline.update=true, then review the diff.
+
+                                It runs as the user of the build, through sh for the uid: run as root, it
+                                leaves root-owned files in the shared local repository that a later goal
+                                of the same build cannot write to. Rootless Docker maps container root to
+                                the build user, so there it stays root.
                             -->
                             <execution>
                                 <id>check-visual-baselines</id>
@@ -372,23 +377,28 @@
                                     <goal>exec</goal>
                                 </goals>
                                 <configuration>
-                                    <executable>docker</executable>
+                                    <executable>sh</executable>
                                     <arguments>
-                                        <argument>run</argument>
+                                        <argument>-c</argument>
+                                        <argument>if docker info -f '{{.SecurityOptions}}' | grep -q rootless; then u=0:0; else u="$(id -u):$(id -g)"; fi; exec docker run --user "$u" "$@"</argument>
+                                        <argument>sh</argument>
                                         <argument>--rm</argument>
                                         <argument>--platform</argument>
                                         <argument>linux/amd64</argument>
                                         <argument>--volume</argument>
                                         <argument>${project.basedir}:/repository</argument>
                                         <argument>--volume</argument>
-                                        <argument>${settings.localRepository}:/root/.m2/repository</argument>
+                                        <argument>${settings.localRepository}:/m2/repository</argument>
                                         <argument>--workdir</argument>
                                         <argument>/repository</argument>
+                                        <argument>--env</argument>
+                                        <argument>HOME=/tmp</argument>
                                         <argument>--env</argument>
                                         <argument>VISUAL_BASELINE_CONTAINER=1</argument>
                                         <argument>${playwright.image}</argument>
                                         <argument>mvn</argument>
                                         <argument>--batch-mode</argument>
+                                        <argument>-Dmaven.repo.local=/m2/repository</argument>
                                         <argument>-P</argument>
                                         <argument>visual-parity</argument>
                                         <argument>surefire:test</argument>
