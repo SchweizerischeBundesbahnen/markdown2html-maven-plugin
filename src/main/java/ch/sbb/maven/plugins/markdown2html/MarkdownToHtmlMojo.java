@@ -20,10 +20,22 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.util.List;
 
+/**
+ * Converts a Markdown file into HTML, the way GitHub renders one.
+ * <p>
+ * Rendering happens in this process, so the build needs no network and no token for it. The parameters below
+ * cut the parts of the document that belong to whoever builds the project rather than to whoever reads the
+ * page, colour the code, and dress the result for wherever it is going to be embedded.
+ */
 @SuppressWarnings("unused")
 @Slf4j
 @Mojo(name = "convert", defaultPhase = LifecyclePhase.GENERATE_RESOURCES)
 public class MarkdownToHtmlMojo extends AbstractMojo {
+
+    /** Creates the mojo. Maven does this and fills the parameters in; nothing else should. */
+    public MarkdownToHtmlMojo() {
+        // Nothing to set up
+    }
 
     @Parameter(property = "inputFile", defaultValue = "${project.basedir}/README.md")
     private File inputFile;
