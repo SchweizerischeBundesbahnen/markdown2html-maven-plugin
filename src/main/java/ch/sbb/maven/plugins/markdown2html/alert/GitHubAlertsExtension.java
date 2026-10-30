@@ -30,6 +30,14 @@ import java.util.Set;
  */
 public class GitHubAlertsExtension implements Parser.ParserExtension, HtmlRenderer.HtmlRendererExtension {
 
+    /** Creates the extension. Prefer {@link #create()}, which is what commonmark-java expects. */
+    public GitHubAlertsExtension() {
+        // Nothing to set up
+    }
+
+    /**
+     * @return the extension, to hand to the parser and the renderer alike
+     */
     public static Extension create() {
         return new GitHubAlertsExtension();
     }
