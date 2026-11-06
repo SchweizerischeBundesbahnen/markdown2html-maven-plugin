@@ -9,10 +9,27 @@ import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/**
+ * Gives every heading an id, so that a table of contents or a link from elsewhere can point at it. GitHub
+ * does this on its own pages; the markup its API returns carries none.
+ * <p>
+ * An id is the heading text, transliterated to ASCII and lowercased. One instance keeps the ids it has
+ * handed out, so a heading whose text repeats gets a number, and holds them only for the document it was
+ * used on.
+ */
 public class HtmlProcessor {
 
     private final Set<String> usedHeadingIds = new HashSet<>();
 
+    /** Creates a processor. Use one per document: it remembers the ids it has handed out. */
+    public HtmlProcessor() {
+        // Nothing to set up
+    }
+
+    /**
+     * @param html the rendered document
+     * @return the same markup, with an id on every heading that had none
+     */
     public @NotNull String addHeadingIds(@NotNull String html) {
         Pattern pattern = Pattern.compile("<(?<tag>h[1-6])>(?<text>.*?)</\\k<tag>>", Pattern.CASE_INSENSITIVE);
         Matcher matcher = pattern.matcher(html);
