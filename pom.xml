@@ -63,7 +63,7 @@
         <httpclient5.version>5.6.5</httpclient5.version>
         <commonmark.version>0.32.0</commonmark.version>
         <rsyntaxtextarea.version>4.0.1</rsyntaxtextarea.version>
-        <jackson-databind.version>2.22.4</jackson-databind.version>
+        <jackson-databind.version>2.23.0</jackson-databind.version>
         <icu4j.version>79.1</icu4j.version>
         <jsoup.version>1.24.1</jsoup.version>
 
