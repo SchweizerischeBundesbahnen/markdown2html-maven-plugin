@@ -41,11 +41,16 @@ public class MarkdownRenderer {
     private final Parser parser;
     private final HtmlRenderer renderer;
 
+    /**
+     * Renders with the syntax of fenced code blocks coloured in.
+     */
     public MarkdownRenderer() {
         this(true);
     }
 
     /**
+     * Renders with the syntax colouring switched as asked.
+     *
      * @param highlightCode whether fenced code blocks with a known language get their syntax coloured in
      */
     public MarkdownRenderer(boolean highlightCode) {
@@ -72,6 +77,10 @@ public class MarkdownRenderer {
         renderer = builder.build();
     }
 
+    /**
+     * @param markdown the document to render
+     * @return it as HTML, ending with a newline unless there was nothing to render
+     */
     public @NotNull String render(@NotNull String markdown) {
         Node document = parser.parse(markdown);
         // jsoup drops the newline the renderer puts after the last block; it is restored so that the
