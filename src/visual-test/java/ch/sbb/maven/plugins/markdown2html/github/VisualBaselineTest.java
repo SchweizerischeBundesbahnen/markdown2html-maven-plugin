@@ -6,6 +6,7 @@ import com.microsoft.playwright.Browser;
 import com.microsoft.playwright.BrowserType;
 import com.microsoft.playwright.Page;
 import com.microsoft.playwright.Playwright;
+import com.microsoft.playwright.Route;
 import lombok.SneakyThrows;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
@@ -89,7 +90,7 @@ class VisualBaselineTest {
                     .newPage();
             // The fixture names no remote asset, and a request leaving the container would make the
             // picture depend on the day
-            page.route("**", route -> route.abort());
+            page.route("**", Route::abort);
 
             page.setContent(readResource("visual/shell.html")
                     .replace("{{content}}", embed(html))

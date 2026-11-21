@@ -8,10 +8,24 @@ import java.util.Base64;
 import java.util.Objects;
 import java.util.regex.Pattern;
 
+/**
+ * Deals with the pictures a document points at: either makes their addresses absolute, or reads them and
+ * writes them into the document, so that the generated file carries them and needs nothing else.
+ */
 public class ImagesProcessor {
 
     private static final String DEFAULT_IMAGE_MIME_TYPE = "image/*";
 
+    /** Creates a processor. It keeps nothing between the documents it is given. */
+    public ImagesProcessor() {
+        // Nothing to set up
+    }
+
+    /**
+     * @param markdown           the document to rewrite
+     * @param relativeLinkPrefix what to put in front of an image address that points inside the repository
+     * @return the document, with every relative image address made absolute
+     */
     public @NotNull String processRelativeUrls(@NotNull String markdown, @NotNull String relativeLinkPrefix) {
         String markdownLinkPattern = "!\\[(?<text>[^]]*)]\\((?<url>[^)]+)\\)";
         return Pattern.compile(markdownLinkPattern)
@@ -19,6 +33,13 @@ public class ImagesProcessor {
                 .replaceAll(match -> "![%s](%s)".formatted(match.group(1), Utils.replaceRelativeUrl(match.group(2), relativeLinkPrefix)));
     }
 
+    /**
+     * Replaces the address of every image with the picture itself, as a data URI. An address that names a
+     * file is read from disk, an absolute one is fetched.
+     *
+     * @param html the rendered document
+     * @return the same markup, carrying its pictures
+     */
     public @NotNull String embedImages(@NotNull String html) {
         String imgSrcPattern = "<img[^<>]* src=([\"'])(?<url>[^(\"|')]*)([\"'])";
         return Pattern.compile(imgSrcPattern)
