@@ -6,6 +6,7 @@ import com.microsoft.playwright.Browser;
 import com.microsoft.playwright.BrowserType;
 import com.microsoft.playwright.Page;
 import com.microsoft.playwright.Playwright;
+import com.microsoft.playwright.Route;
 import lombok.SneakyThrows;
 import org.junit.jupiter.api.Test;
 
@@ -85,7 +86,7 @@ class VisualParityTest {
                     .newPage();
             // Nothing may be fetched: the camo URLs GitHub returns are not the ones the local renderer
             // keeps, and a network round trip would make the screenshots depend on the day
-            page.route("**", route -> route.abort());
+            page.route("**", Route::abort);
 
             ScreenshotComparison comparison = ScreenshotComparison.of(screenshot(page, githubHtml), screenshot(page, localHtml));
             comparison.writeTo(ARTIFACTS);
